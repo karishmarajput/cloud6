@@ -5,7 +5,11 @@ function OgRegister() {
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
+const [password, setPassword] = useState('');
 
+const handlePasswordChange = (e) => {
+  setPassword(e.target.value);
+};
   const handleOrgNumberChange = (e) => {
     setOrganizationNumber(e.target.value);
   };
@@ -21,19 +25,41 @@ function OgRegister() {
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // You can perform registration logic here with the form data
-    console.log('Organization Number:', organizationNumber);
-    console.log('Name:', name);
-    console.log('Phone Number:', phoneNumber);
-    console.log('Email:', email);
+
+    try {
+      const response = await fetch('http://localhost:5000/organisation/ogregister', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ogNumber: organizationNumber,
+          name,
+          phoneNumber,
+          email,
+          password
+        }),
+      });
+
+      if (response.ok) {
+        // Handle success, e.g., show a success message or redirect
+        console.log('Registration successful! You will receive a mail once verified by admin');
+      } else {
+        // Handle error, e.g., show an error message
+        console.error('Registration failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+
     // Reset the form after handling the registration data
     setOrganizationNumber('');
     setName('');
     setPhoneNumber('');
     setEmail('');
+    setPassword('');
   };
 
   return (
@@ -79,6 +105,16 @@ function OgRegister() {
               onChange={handleEmailChange}
             />
           </label>
+        </div>
+        <div>
+        <label>
+            Password:
+            <input
+            type="password"
+            value={password}
+            onChange={handlePasswordChange}
+            />
+        </label>
         </div>
         <div>
           <button type="submit">Register</button>
