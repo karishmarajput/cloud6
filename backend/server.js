@@ -16,7 +16,9 @@ const cors = require('cors');
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'build')));
 const ogRoutes = require('./routes/organisation');
+const adminRoutes = require('./routes/admin')
 app.use('/organisation', ogRoutes);
+app.use('/admin', adminRoutes);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));

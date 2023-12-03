@@ -1,27 +1,30 @@
-import ReactDOM from "react-dom/client";
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import './App.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import LandingPage from "./pages/LandingPage";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Layout from "./pages/Layout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AuthenticatedAdminRoute from "./pages/authRoute/AuthenticatedAdminRoute";
 import OgLogin from "./pages/organisation/OgLogin";
 import OgRegister from "./pages/organisation/OgRegister";
+import AdminLogin from "./pages/admin/AdminLogin";
+import ListAllAuth from "./pages/authRoute/ListAllAuth";
 
 function App() {
   return (
     <div className="App">
-         <BrowserRouter>
-            <Routes>
-              <Route >
-                <Route index element={<LandingPage />} />
-                <Route path ="ogLogin" element={<OgLogin/>}/>
-                <Route path ="OgRegister" element={<OgRegister/>}/>
-                {/* <Route path="blogs" element={<Blogs />} />
-                <Route path="contact" element={<Contact />} /> */}
-                {/* <Route path="*" element={<NoPage />} /> */}
-              </Route>
-            </Routes>
-          </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="ogLogin" element={<OgLogin />} />
+          <Route path="OgRegister" element={<OgRegister />} />
+          <Route path="admin" element={<AdminLogin />} />
+          <Route path="admin-dashboard" element={<AuthenticatedAdminRoute />} />
+          <Route path="list-all-organisation" element={<ListAllAuth />} />
+          {/* Use AuthenticatedAdminRoute for the admin-dashboard */}
+          {/* <AuthenticatedAdminRoute path="admin-dashboard" element={<AdminDashboard />} /> */}
+          {/* Additional Routes can be added here */}
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
