@@ -1,0 +1,12 @@
+.our-story-page {
+  height: 100vh;
+  padding: 80px 20px;
+  background-color: #f8f9fa;
+  color: #343a40;
+}
+
+.story-content {
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
