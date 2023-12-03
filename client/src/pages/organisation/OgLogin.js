@@ -1,10 +1,16 @@
-import React, { useState,useEffect } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OrganisationDashboard from './OrganisationDashboard';
+import './OgLogin.css';
+import NavbarCertif from "../components/Navbar";
+
 function OgLogin() {
   const [ogNumber, setOgNumber] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [loggedIn, setLoggedIn] = useState(false);
+
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
 
@@ -53,34 +59,42 @@ function OgLogin() {
   };
 
   return (
-    <div>
-      <h2>Login Form</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            Organisation Number:
-            <input
-              type="text"
-              value={ogNumber}
-              onChange={handleOgNumberChange}
-            />
-          </label>
+    <>
+      {/* <NavbarCertif /> */}
+      <div className="login-container">
+        <div className="flex-container">
+          <div className="image-section">
+            <img src="login-side.png" alt="yo" />
+          </div>
+          <div className="form-section">
+            <h2>Login Form</h2>
+            <form className="login-form" onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="ogNumber">Organisation Number:</label>
+                <input
+                  type="text"
+                  id="ogNumber"
+                  value={ogNumber}
+                  onChange={handleOgNumberChange}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="password">Password:</label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={handlePasswordChange}
+                />
+              </div>
+              <div className="form-group">
+                <button type="submit">Login</button>
+              </div>
+            </form>
+          </div>
         </div>
-        <div>
-          <label>
-            Password:
-            <input
-              type="password"
-              value={password}
-              onChange={handlePasswordChange}
-            />
-          </label>
-        </div>
-        <div>
-          <button type="submit">Login</button>
-        </div>
-      </form>
-    </div>
+      </div>
+    </>
   );
 }
 

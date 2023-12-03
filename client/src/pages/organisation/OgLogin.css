@@ -1,0 +1,80 @@
+.login-container {
+    width: 100%;
+  }
+  
+  .flex-container {
+    display: flex;
+    flex-direction: row; /* Display columns on small screens */
+  }
+  
+  .image-section,
+  .form-section {
+    flex: 1;
+    padding: 20px; /* Adjust the padding as needed */
+    overflow: hidden; /* Hide overflow to prevent vertical scroll */
+  }
+  
+  .image-section img {
+    max-width: 100%;
+    max-height: 80%; /* Limit the height to prevent vertical scroll */
+    height: auto;
+    display: block; /* Remove any extra spacing below the image */
+    margin: 0 auto; /* Center the image horizontally */
+  }
+  
+  .form-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Center the contents horizontally */
+  
+    /* Additional styles for mobile view and increased font size */
+    max-width: 100%;
+    font-size: 18px; /* Adjust the font size as needed */
+  }
+  
+  .login-form {
+    width: 100%;
+    max-width: 300px; /* Adjust the max-width as needed */
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    text-align: left; /* Left-align the labels */
+  }
+  
+  input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  
+  button {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Media query for small screens (e.g., mobile devices) */
+  @media screen and (max-width: 600px) {
+    .flex-container {
+      flex-direction: column; /* Switch back to column layout for small screens */
+    }
+  
+    .form-section {
+      max-width: none; /* Remove max-width for better responsiveness */
+    }
+  }
+  
+  button:hover {
+    background-color: #0056b3; /* Example hover background color */
+  }
+  
