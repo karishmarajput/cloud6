@@ -1,15 +1,13 @@
 import React, { useState,useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import OrganisationDashboard from './OrganisationDashboard';
 function OgLogin() {
   const [ogNumber, setOgNumber] = useState('');
   const [password, setPassword] = useState('');
-  const [loggedIn, setLoggedIn] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
-    // Check local storage for authentication token on component mount
     const authToken = localStorage.getItem('authToken');
-    if (authToken) {
-      setLoggedIn(true);
-    }
+
   }, []);
   const handleOgNumberChange = (e) => {
     setOgNumber(e.target.value);
@@ -39,8 +37,8 @@ function OgLogin() {
         console.log('Login successful!');
         const data = await response.json();
         localStorage.setItem('authToken', data.token);
-        setLoggedIn(true);
-        // Redirect or render organisation dashboard
+        navigate('/organisation-dashboard');
+       
       } else {
         // Handle incorrect login details
         console.error('Login failed');
@@ -53,9 +51,7 @@ function OgLogin() {
     setOgNumber('');
     setPassword('');
   };
-  if (loggedIn) {
-    return <OrganisationDashboard />;
-  }
+
   return (
     <div>
       <h2>Login Form</h2>

@@ -7,6 +7,8 @@ import OgLogin from './pages/organisation/OgLogin';
 import OgRegister from './pages/organisation/OgRegister';
 import AdminLogin from './pages/admin/AdminLogin';
 import ListAllAuth from './pages/authRoute/ListAllAuth';
+import OrganisationAuth from './pages/authRoute/organisationAuth';
+import GenerateCertificateAuth from './pages/authRoute/GenerateCertificate';
 function App() {
   return (
     <div className="App">
@@ -18,9 +20,8 @@ function App() {
           <Route path="admin" element={<AdminLogin />} />
           <Route path="admin-dashboard" element={<AuthenticatedAdminRoute/>}/>
           <Route path='list-all-organisation' element={<ListAllAuth/>}/>
-          {/* Use AuthenticatedAdminRoute for the admin-dashboard */}
-          {/* <AuthenticatedAdminRoute path="admin-dashboard" element={<AdminDashboard />} /> */}
-          {/* Additional Routes can be added here */}
+          <Route path='organisation-dashboard' element={<OrganisationAuth/>}/>
+          <Route path='generate-certificate' element={<GenerateCertificateAuth/>}/>
         </Routes>
       </BrowserRouter>
     </div>
