@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Navigate } from 'react-router-dom';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminLogin from './pages/admin/AdminLogin';
+import AdminDashboard from '../admin/AdminDashboard';
+import AdminLogin from '../admin/AdminLogin';
 function AuthenticatedAdminRoute({ element: Element, ...rest }) {
   const authToken = localStorage.getItem('authToken');
   const isAuthenticated = !!authToken; // Check if authToken exists
