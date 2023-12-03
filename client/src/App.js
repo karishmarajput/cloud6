@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
 import LandingPage from "./pages/LandingPage";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Layout from "./pages/Layout";
 import OgLogin from "./pages/organisation/OgLogin";
 import OgRegister from "./pages/organisation/OgRegister";

@@ -1,12 +1,41 @@
-function Navbar(){
-    return(
-        <div>
-            button organisation dropdown- Login, Register
-            <br>
-            </br>
-            Admin Login<br/>
-            Verify 
-        </div>
-    )
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
+
+function NavbarCertif() {
+  return (
+    <Navbar expand="lg" data-bs-theme="light">
+      <Container>
+        <Navbar.Brand href="#home" className="text-uppercase">
+          Verifier
+        </Navbar.Brand>
+        <Navbar.Toggle />
+        <Navbar.Collapse className="justify-content-end">
+          <Nav className="ml-auto">
+            <Nav.Link href="#home" style={{ marginRight: "25px" }}>
+              Verify
+            </Nav.Link>
+            <Nav.Link href="#features" style={{ marginRight: "25px" }}>
+              Admin Login
+            </Nav.Link>
+            <NavDropdown
+              title="Join"
+              style={{ marginRight: "15px" }}
+              id="basic-nav-dropdown"
+            >
+              <NavDropdown.Item className="text-center" href="#action/3.1">
+                Register
+              </NavDropdown.Item>
+              <NavDropdown.Item className="text-center" href="#action/3.4">
+                Login
+              </NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  );
 }
-export default Navbar
+
+export default NavbarCertif;

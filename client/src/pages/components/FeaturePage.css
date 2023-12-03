@@ -1,0 +1,28 @@
+.feature-page {
+  padding: 80px 20px;
+  background-color: #343a40;
+  color: #ffffff;
+}
+
+.feature-list {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.feature-card {
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #495057;
+  color: #ffffff;
+}
+
+.feature-card img {
+  border-radius: 50%;
+}
+
+/* Optional: Add spacing between cards */
+.feature-card + .feature-card {
+  margin-top: 20px;
+}
