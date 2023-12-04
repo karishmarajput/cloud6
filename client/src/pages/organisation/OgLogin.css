@@ -2,50 +2,56 @@
     width: 100%;
   }
   
-  .flex-container {
+  .flex-container-login {
     display: flex;
-    flex-direction: row; /* Display columns on small screens */
+    flex-direction: row; 
   }
   
-  .image-section,
-  .form-section {
+  .image-section-login,
+  .form-section-login {
     flex: 1;
-    padding: 20px; /* Adjust the padding as needed */
-    overflow: hidden; /* Hide overflow to prevent vertical scroll */
+    padding: 20px;
+    overflow: hidden;
   }
   
-  .image-section img {
+  .image-section-login img {
     max-width: 100%;
-    max-height: 80%; /* Limit the height to prevent vertical scroll */
+    max-height: 85%;
     height: auto;
-    display: block; /* Remove any extra spacing below the image */
-    margin: 0 auto; /* Center the image horizontally */
+    display: flex;
+    margin: 0 auto;
   }
   
-  .form-section {
+  .form-section-login {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; /* Center the contents horizontally */
-  
-    /* Additional styles for mobile view and increased font size */
+    align-items: center;
     max-width: 100%;
-    font-size: 18px; /* Adjust the font size as needed */
+    font-size: 18px;
   }
   
   .login-form {
     width: 100%;
-    max-width: 300px; /* Adjust the max-width as needed */
+    max-width: 300px;
   }
   
-  .form-group {
+  .form-group-login {
     margin-bottom: 15px;
+  }
+
+  .form-group-login-button {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
   
   label {
-    display: block;
+    display: flex;
     margin-bottom: 5px;
-    text-align: left; /* Left-align the labels */
+    text-align: left;
   }
   
   input {
@@ -61,20 +67,20 @@
     color: #fff;
     border: none;
     cursor: pointer;
+    
   }
   
-  /* Media query for small screens (e.g., mobile devices) */
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 768px) {
     .flex-container {
-      flex-direction: column; /* Switch back to column layout for small screens */
+      flex-direction: column;
     }
   
     .form-section {
-      max-width: none; /* Remove max-width for better responsiveness */
+      max-width: none;
     }
   }
   
   button:hover {
-    background-color: #0056b3; /* Example hover background color */
+    background-color: #0056b3;
   }
   

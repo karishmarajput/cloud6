@@ -62,14 +62,14 @@ function OgLogin() {
     <>
       {/* <NavbarCertif /> */}
       <div className="login-container">
-        <div className="flex-container">
-          <div className="image-section">
+        <div className="flex-container-login">
+          <div className="image-section-login">
             <img src="login-side.png" alt="yo" />
           </div>
-          <div className="form-section">
+          <div className="form-section-login">
             <h2>Login Form</h2>
             <form className="login-form" onSubmit={handleSubmit}>
-              <div className="form-group">
+              <div className="form-group-login">
                 <label htmlFor="ogNumber">Organisation Number:</label>
                 <input
                   type="text"
@@ -78,7 +78,7 @@ function OgLogin() {
                   onChange={handleOgNumberChange}
                 />
               </div>
-              <div className="form-group">
+              <div className="form-group-login">
                 <label htmlFor="password">Password:</label>
                 <input
                   type="password"
@@ -87,7 +87,7 @@ function OgLogin() {
                   onChange={handlePasswordChange}
                 />
               </div>
-              <div className="form-group">
+              <div className="form-group-login-button">
                 <button type="submit">Login</button>
               </div>
             </form>
