@@ -1,15 +1,15 @@
-html, body {
+/* html,
+body {
   height: 100%;
   margin: 0;
-  overflow: hidden;
-}
+} */
 
-.container {
+/* .container {
   display: flex;
   position: relative;
   height: 100%;
   flex-direction: row;
-}
+} */
 
 .image-section {
   flex: 1;
@@ -86,4 +86,3 @@ html, body {
   border: none;
   cursor: pointer;
 }
-

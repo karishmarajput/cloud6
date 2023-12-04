@@ -5,15 +5,18 @@ const MainPage = () => {
   return (
     <div className="main-page container">
       <div className="row">
-        <div className="col-md-6">
-          <h1 className="display-4">Welcome to Certificate Verification</h1>
+        <div className="heading col-md-6">
+          <h3 className="display-6">Welcome to</h3>
+          <h1 className="display-3">Certificate Verification</h1>
           <p className="lead">
             Verify the authenticity of certificates easily with our platform.
           </p>
         </div>
         <div className="col-md-6 text-center">
           <img
-            src="https://via.placeholder.com/400x300"
+            src="certifss.png"
+            width={360}
+            height={480}
             alt="Certificate Verification Image"
             className="img-fluid rounded"
           />
