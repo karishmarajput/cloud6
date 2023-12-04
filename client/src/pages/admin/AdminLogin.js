@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './AdminLogin.css';
 
 function AdminLogin() {
   const [username, setUsername] = useState('');
@@ -50,34 +51,39 @@ function AdminLogin() {
   };
 
   return (
-    <div>
-      <h2>Admin Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            Username:
-            <input
-              type="text"
-              value={username}
-              onChange={handleUsernameChange}
-            />
-          </label>
+    <div className="login-container">
+        <div className="flex-container-login">
+          <div className="image-section-login">
+            <img src="admin-login-side.jpg" alt="yo" />
+          </div>
+          <div className="form-section-login">
+            <h2>Admin Login</h2>
+            <form className="login-form" onSubmit={handleSubmit}>
+              <div className="form-group-login">
+                <label htmlFor="ogNumber">Username:</label>
+                <input
+                  type="text"
+                  id="username"
+                  value={username}
+                  onChange={handleUsernameChange}
+                />
+              </div>
+              <div className="form-group-login">
+                <label htmlFor="password">Password:</label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={handlePasswordChange}
+                />
+              </div>
+              <div className="form-group-login-button">
+                <button type="submit">Login</button>
+              </div>
+            </form>
+          </div>
         </div>
-        <div>
-          <label>
-            Password:
-            <input
-              type="password"
-              value={password}
-              onChange={handlePasswordChange}
-            />
-          </label>
-        </div>
-        <div>
-          <button type="submit">Login</button>
-        </div>
-      </form>
-    </div>
+      </div>
   );
 }
 
