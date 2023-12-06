@@ -10,6 +10,7 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import ListAllAuth from "./pages/authRoute/ListAllAuth";
 import OrganisationAuth from "./pages/authRoute/organisationAuth";
 import GenerateCertificateAuth from "./pages/authRoute/GenerateCertificate";
+import Verify from "./pages/Verify";
 function App() {
   return (
     <div className="App">
@@ -26,6 +27,7 @@ function App() {
             path="generate-certificate"
             element={<GenerateCertificateAuth />}
           />
+          <Route path="verify" element={<Verify/>}/>
         </Routes>
       </BrowserRouter>
     </div>

@@ -25,8 +25,14 @@ const organisationSchema = new mongoose.Schema({
   },
   isVerified: {
     type: Boolean,
-    default: false // Set default value if not provided
-  }
+    default: false 
+  },
+  templates: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Template'
+    }
+  ]
 });
 
 // Create the Organisation model
