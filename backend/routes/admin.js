@@ -4,6 +4,7 @@ const Admin = require('../models/admin'); // Import the Admin model
 const Organisation = require('../models/organisation')
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 router.use(bodyParser.json()); // Parse JSON bodies
 router.use(bodyParser.urlencoded({ extended: true }));
 // Route for admin registration
@@ -70,7 +71,6 @@ router.post('/verify-organisation/:id', async (req, res) => {
   const orgId = req.params.id;
 
   try {
-    // Find the organisation by ID and update isVerified to true
     const organisation = await Organisation.findByIdAndUpdate(
       orgId,
       { $set: { isVerified: true } },
@@ -81,7 +81,30 @@ router.post('/verify-organisation/:id', async (req, res) => {
       return res.status(404).json({ message: 'Organisation not found' });
     }
 
-    res.status(200).json({ message: 'Organisation verified successfully' });
+    const transporter = nodemailer.createTransport({
+      service: 'outlook',
+      auth: {
+        user: 'verifiertheoriginal@outlook.com',
+        pass: 'Verifier$321',
+      },
+    });
+
+    const mailOptions = {
+      from: 'verifiertheoriginal@outlook.com',
+      to: organisation.email,
+      subject: 'Organisation Verification',
+      text: `Your organisation ${organisation.name} has been successfully verified. You can now login to your accounts and generate secure certificates.`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error sending email:', error);
+        res.status(500).json({ message: 'Failed to send verification email' });
+      } else {
+        console.log('Email sent: ' + info.response);
+        res.status(200).json({ message: 'Organisation verified successfully' });
+      }
+    });
   } catch (error) {
     console.error('Error verifying organisation:', error);
     res.status(500).json({ message: 'Server error' });
