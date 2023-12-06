@@ -7,21 +7,31 @@ function NavbarCertif() {
   return (
     <Navbar expand="lg" data-bs-theme="light">
       <Container>
-        <Navbar.Brand href="#home" className="text-uppercase">
+        <Navbar.Brand
+          style={{ color: "#0A4D68" }}
+          href="#home"
+          className="text-uppercase"
+        >
           Verifier
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Nav className="ml-auto">
-            <Nav.Link href="verify" style={{ marginRight: "25px" }}>
+            <Nav.Link
+              href="verify"
+              style={{ marginRight: "25px", color: "#0A4D68" }}
+            >
               Verify
             </Nav.Link>
-            <Nav.Link href="admin" style={{ marginRight: "25px" }}>
+            <Nav.Link
+              href="admin"
+              style={{ marginRight: "25px", color: "#0A4D68" }}
+            >
               Admin Login
             </Nav.Link>
             <NavDropdown
               title="Join"
-              style={{ marginRight: "15px" }}
+              style={{ marginRight: "15px", color: "#0A4D68" }}
               id="basic-nav-dropdown"
             >
               <NavDropdown.Item className="text-center" href="ogRegister">
