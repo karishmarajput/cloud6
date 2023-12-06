@@ -13,7 +13,7 @@ function NavbarCertif() {
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Nav className="ml-auto">
-            <Nav.Link href="" style={{ marginRight: "25px" }}>
+            <Nav.Link href="verify" style={{ marginRight: "25px" }}>
               Verify
             </Nav.Link>
             <Nav.Link href="admin" style={{ marginRight: "25px" }}>
@@ -24,7 +24,7 @@ function NavbarCertif() {
               style={{ marginRight: "15px" }}
               id="basic-nav-dropdown"
             >
-              <NavDropdown.Item className="text-center" href="OgRegister">
+              <NavDropdown.Item className="text-center" href="ogRegister">
                 Register
               </NavDropdown.Item>
               <NavDropdown.Item className="text-center" href="ogLogin">
