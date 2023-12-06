@@ -1,5 +1,8 @@
 import React from "react";
 import "./FeaturePage.css";
+import LockOpenRoundedIcon from "@mui/icons-material/LockOpenRounded";
+import PersonIcon from "@mui/icons-material/Person";
+import SpeedIcon from "@mui/icons-material/Speed";
 
 const FeaturePage = () => {
   return (
@@ -8,11 +11,7 @@ const FeaturePage = () => {
       <div className="feature-list row">
         <div className="col-md-4 mb-4">
           <div className="feature-card">
-            <img
-              src="https://via.placeholder.com/150"
-              alt="Secure Verification"
-              className="img-fluid mb-3"
-            />
+            <LockOpenRoundedIcon sx={{ fontSize: 150 }} />
             <h4>Secure Verification</h4>
             <p>
               Our platform ensures the security and authenticity of certificate
@@ -22,11 +21,7 @@ const FeaturePage = () => {
         </div>
         <div className="col-md-4 mb-4">
           <div className="feature-card">
-            <img
-              src="https://via.placeholder.com/150"
-              alt="User-friendly Interface"
-              className="img-fluid mb-3"
-            />
+            <PersonIcon sx={{ fontSize: 150 }} />
             <h4>User-friendly Interface</h4>
             <p>
               Enjoy a user-friendly interface for a seamless and intuitive
@@ -36,11 +31,7 @@ const FeaturePage = () => {
         </div>
         <div className="col-md-4 mb-4">
           <div className="feature-card">
-            <img
-              src="https://via.placeholder.com/150"
-              alt="Fast and Reliable"
-              className="img-fluid mb-3"
-            />
+            <SpeedIcon sx={{ fontSize: 150 }} />
             <h4>Fast and Reliable</h4>
             <p>
               Experience fast and reliable verification services, ensuring quick

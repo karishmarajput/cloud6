@@ -1,7 +1,7 @@
 .feature-page {
   padding: 80px 20px;
-  background-color: #343a40;
-  color: #ffffff;
+  background-color: #fce8df;
+  color: #e6a36a;
 }
 
 .feature-list {
@@ -14,12 +14,12 @@
   text-align: center;
   padding: 20px;
   border-radius: 8px;
-  background-color: #495057;
-  color: #ffffff;
+  background-color: #e6a36a;
+  color: #fce8df;
 }
 
-.feature-card img {
-  border-radius: 50%;
+.feature-card h4 {
+  margin-top: 10px;
 }
 
 /* Optional: Add spacing between cards */

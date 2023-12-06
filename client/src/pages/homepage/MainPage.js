@@ -5,9 +5,11 @@ const MainPage = () => {
   return (
     <div className="main-page container">
       <div className="row">
-        <div className="heading col-md-6">
-          <h3 className="display-6">Welcome to</h3>
-          <h1 className="display-3">Certificate Verification</h1>
+        <div className="heading col-md-6" style={{ color: "#F1F4F7" }}>
+          <h3 className="display-7">Welcome to</h3>
+          <h1 className="display-4" style={{ fontWeight: "bold" }}>
+            <b>Certificate Verification</b>
+          </h1>
           <p className="lead">
             Verify the authenticity of certificates easily with our platform.
           </p>
