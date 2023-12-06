@@ -47,10 +47,9 @@ router.post('/login', async (req, res) => {
 
 router.get('/unverified-organisations', async (req, res) => {
   try {
-    // Fetch unverified organisations from your database
     const unverifiedOrganisations = await Organisation.find({ isVerified: false });
 
-    res.json(unverifiedOrganisations); // Send the unverified organisations as JSON response
+    res.json(unverifiedOrganisations);
   } catch (error) {
     console.error('Error fetching unverified organisations:', error);
     res.status(500).json({ message: 'Server error' });
@@ -58,10 +57,10 @@ router.get('/unverified-organisations', async (req, res) => {
 });
 router.get('/verified-organisations', async (req, res) => {
   try {
-    // Fetch unverified organisations from your database
+
     const unverifiedOrganisations = await Organisation.find({ isVerified: true });
 
-    res.json(unverifiedOrganisations); // Send the unverified organisations as JSON response
+    res.json(unverifiedOrganisations); 
   } catch (error) {
     console.error('Error fetching verified organisations:', error);
     res.status(500).json({ message: 'Server error' });

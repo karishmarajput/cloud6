@@ -28,11 +28,8 @@ function AdminLogin() {
       });
 
       if (response.ok) {
-        // Retrieve the authentication token from the response
         const data = await response.json();
         const authToken = data.token;
-
-        // Store the authentication token in local storage
         localStorage.setItem('authToken', authToken);
 
         // Redirect to AdminDashboard upon successful login

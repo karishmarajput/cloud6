@@ -1,7 +1,7 @@
 import React from 'react';
 import GenerateCertificate from '../organisation/GenerateCertificate';
 import OgLogin from '../organisation/OgLogin';
-function OrganisationAuth({ element: Element, ...rest }) {
+function GenerateCertificateAuth({ element: Element, ...rest }) {
   const authToken = localStorage.getItem('authToken');
   const isAuthenticated = !!authToken; 
   const getAdminName = () => {
@@ -28,4 +28,4 @@ function OrganisationAuth({ element: Element, ...rest }) {
   );
 }
 
-export default OrganisationAuth;
+export default GenerateCertificateAuth;
