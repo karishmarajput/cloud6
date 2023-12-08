@@ -91,6 +91,7 @@ exports.uploadTemplate = async(req,res,next) => {
     console.log('hi')
     try {
         console.log(req.body)
+        console.log(req.userData)
         const bool = req.body.publicBool;
         const org = await Organization.findById(req.userData.org.id);
         org.templates.push({name : req.file.filename,publicBool : bool})

@@ -32,7 +32,7 @@ function GenerateCertificate() {
   
     const authToken = localStorage.getItem('authToken');
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('myFile', file);
     formData.append('publicBool', isPublic);
     for (const entry of formData.entries()) {
         console.log(entry[0], entry[1]);
