@@ -1,5 +1,6 @@
 import React from "react";
 import "./MainPage.css";
+import { motion } from "framer-motion";
 
 const MainPage = () => {
   return (
