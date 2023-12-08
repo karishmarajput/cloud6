@@ -9,6 +9,7 @@ mongoose.connect(
 mongoose.Promise = global.Promise;
 const adminroute = require("./routes/admin")
 const organizationroute = require("./routes/organisation")
+const verifyroute = require("./routes/verification")
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
@@ -26,6 +27,7 @@ app.use((req, res, next) => {
   });
 app.use("/admin",adminroute);
 app.use("/organization",organizationroute);
+app.use("/verify",verifyroute)
 app.use((req, res, next) => {
     const error = new Error("Not found");
     error.status = 404;
