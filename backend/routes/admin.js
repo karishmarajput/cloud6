@@ -7,6 +7,8 @@ const upload = multer({dest : 'public/files'});
 router.post("/signup",AdminController.signup)
 router.post("/login",AdminController.login);
 router.get("/home",checkAuth,AdminController.getUnverifiedOrganizations);
+router.get("/organisation",checkAuth,AdminController.getVerifiedOrganizations);
+router.post("/deleteOrganization/:organizationId",checkAuth,AdminController.deleteOrganization);
 router.post("/verifyUser/:organizationId",checkAuth,AdminController.verifyOrganization);
 
 module.exports = router;

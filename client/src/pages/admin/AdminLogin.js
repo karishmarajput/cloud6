@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import './AdminLogin.css';
 
 function AdminLogin() {
-  const [username, setUsername] = useState('');
+  const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
+  const handleemailChange = (e) => {
+    setemail(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -19,28 +19,23 @@ function AdminLogin() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/admin/login', {
+      const response = await fetch('http://localhost:8000/admin/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
       });
-
+      console.log(response)
       if (response.ok) {
         const data = await response.json();
         const authToken = data.token;
         localStorage.setItem('authToken', authToken);
-
-        // Redirect to AdminDashboard upon successful login
         navigate('/admin-dashboard');
       } else {
-        // Handle login failure, show error message or take appropriate action
-        alert('Invalid username or password');
+        alert('Invalid email or password');
       }
-
-      // Reset the form after handling the login data
-      setUsername('');
+      setemail('');
       setPassword('');
     } catch (error) {
       console.error('Error:', error);
@@ -57,12 +52,12 @@ function AdminLogin() {
             <h2>Admin Login</h2>
             <form className="login-form" onSubmit={handleSubmit}>
               <div className="form-group-login">
-                <label htmlFor="ogNumber">Username:</label>
+                <label htmlFor="ogNumber">Email:</label>
                 <input
                   type="text"
-                  id="username"
-                  value={username}
-                  onChange={handleUsernameChange}
+                  id="email"
+                  value={email}
+                  onChange={handleemailChange}
                 />
               </div>
               <div className="form-group-login">
