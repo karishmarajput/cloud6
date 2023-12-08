@@ -1,12 +1,7 @@
 const mongoose = require('mongoose');
 
-// Define the Organisation schema
 const organisationSchema = new mongoose.Schema({
-  ogNumber: {
-    type: String,
-    unique: true,
-    required: true
-  },
+
   name: {
     type: String,
     required: true
@@ -17,7 +12,8 @@ const organisationSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   password: {
     type: String,
@@ -35,7 +31,6 @@ const organisationSchema = new mongoose.Schema({
   ]
 });
 
-// Create the Organisation model
 const Organisation = mongoose.model('Organisation', organisationSchema);
 
 module.exports = Organisation;

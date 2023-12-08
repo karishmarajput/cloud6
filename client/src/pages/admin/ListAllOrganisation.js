@@ -9,33 +9,50 @@ function ListAllOrganisation() {
 
   const fetchVerifiedOrganisations = async () => {
     try {
-      const response = await fetch('http://localhost:5000/admin/verified-organisations');
+      const authToken = localStorage.getItem('authToken');
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+        'Content-Type': 'application/json', 
+      };
+  
+      const response = await fetch('http://localhost:8000/admin/organisation', {
+        headers: headers
+      });
+  
       if (!response.ok) {
         throw new Error('Failed to fetch');
       }
+  
       const data = await response.json();
-      setVerifiedOrganisations(data);
+      setVerifiedOrganisations(data.data);
     } catch (error) {
       console.error('Error fetching verified organisations:', error);
     }
   };
+  
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/admin/delete-organisation/${id}`, {
+      const authToken = localStorage.getItem('authToken');
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`,
+      };
+      const response = await fetch(`http://localhost:8000/admin/deleteOrganization/${id}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers,
         body: JSON.stringify({ id }),
       });
+  
       if (!response.ok) {
         throw new Error('Couldn\'t Delete');
       }
+  
       fetchVerifiedOrganisations();
     } catch (error) {
-      console.error('Error verifying organisation:', error);
+      console.error('Error deleting organisation:', error);
     }
   };
+  
 
   return (
     <div>
@@ -43,7 +60,6 @@ function ListAllOrganisation() {
       <table>
         <thead>
           <tr>
-            <th>OG Number</th>
             <th>Name</th>
             <th>Phone Number</th>
             <th>Email</th>
@@ -52,18 +68,25 @@ function ListAllOrganisation() {
           </tr>
         </thead>
         <tbody>
-          {verifiedOrganisations.map((org) => (
-            <tr key={org._id}>
-              <td>{org.ogNumber}</td>
-              <td>{org.name}</td>
-              <td>{org.phoneNumber}</td>
-              <td>{org.email}</td>
-              <td>
-              <button onClick={() => handleDelete(org._id)}>Delete</button>
-              </td>
+          {Array.isArray(verifiedOrganisations) && verifiedOrganisations.length > 0 ? (
+
+            verifiedOrganisations.map((org) => (
+              <tr key={org._id}>
+                <td>{org.name}</td>
+                <td>{org.phoneNumber}</td>
+                <td>{org.email}</td>
+                <td>
+                <button onClick={() => handleDelete(org._id)}>Delete</button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5">No verified organisations found</td>
             </tr>
-          ))}
+          )}
         </tbody>
+       
       </table>
     </div>
   );

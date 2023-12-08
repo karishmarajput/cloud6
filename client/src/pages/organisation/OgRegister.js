@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './OgRegister.css';
 
 function OgRegister() {
-  const [organizationNumber, setOrganizationNumber] = useState('');
+  // const [organizationNumber, setOrganizationNumber] = useState('');
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
@@ -12,9 +12,9 @@ function OgRegister() {
     setPassword(e.target.value);
   };
 
-  const handleOrgNumberChange = (e) => {
-    setOrganizationNumber(e.target.value);
-  };
+  // const handleOrgNumberChange = (e) => {
+  //   setOrganizationNumber(e.target.value);
+  // };
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -32,13 +32,13 @@ function OgRegister() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/organisation/ogregister', {
+      const response = await fetch('http://localhost:8000/organization/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ogNumber: organizationNumber,
+          // ogNumber: organizationNumber,
           name,
           phoneNumber,
           email,
@@ -47,18 +47,15 @@ function OgRegister() {
       });
 
       if (response.ok) {
-        // Handle success, e.g., show a success message or redirect
+
         console.log('Registration successful! You will receive a mail once verified by admin');
       } else {
-        // Handle error, e.g., show an error message
+        console.log(response)
         console.error('Registration failed');
       }
     } catch (error) {
       console.error('Error:', error);
     }
-
-    // Reset the form after handling the registration data
-    setOrganizationNumber('');
     setName('');
     setPhoneNumber('');
     setEmail('');
@@ -74,7 +71,7 @@ function OgRegister() {
       <div className="form-section">
         <h2>Register Form</h2>
         <form onSubmit={handleSubmit}>
-          <div>
+          {/* <div>
             <label>
               Organization Number:
               <input
@@ -83,7 +80,7 @@ function OgRegister() {
                 onChange={handleOrgNumberChange}
               />
             </label>
-          </div>
+          </div> */}
           <div>
             <label>
               Name:

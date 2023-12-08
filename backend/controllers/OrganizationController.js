@@ -23,7 +23,9 @@ const ethers = require("ethers")
 //const contractAddress = "0x600403fa270d33EedaD42395a7Cd337a26a4676B"
 //const contractInstance = new ethers.Contract(contractAddress,abi,signer);
 exports.signup = async(req,res,next) => { 
-    const {name,email,password} = req.body;
+    console.log('hello')
+    const {name,email,phoneNumber,password} = req.body;
+    console.log(req.body)
     try {
         let org = await Organization.findOne({email : email});
         if (org){
@@ -34,7 +36,8 @@ exports.signup = async(req,res,next) => {
             name : name,
             email : email,
             password : password,
-            verified : false
+            phoneNumber : phoneNumber,
+            isVerified : false
         })
         const salt = await bcrypt.genSalt(10);
         org.password = await bcrypt.hash(password,salt);
@@ -55,15 +58,17 @@ exports.signup = async(req,res,next) => {
 }
 exports.login = async(req,res,next) => {
     const {email,password} = req.body;
+ 
     try {
         let org = await Organization.findOne({email : email});
         if (!org){
             return res.status(400).json({message : "Organization doesn't exist"});
         }
-        if (!org.verified){
+        if (!org.isVerified){
             return res.status(401).json({message : "Organization not yet verified"})
         }
         const isMatch = await bcrypt.compare(password,org.password);
+
         if(!isMatch){
             return res.status(400).json({message : "Incorrect password"});
         }

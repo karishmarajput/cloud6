@@ -6,7 +6,7 @@ import './OgLogin.css';
 import NavbarCertif from "../components/Navbar";
 
 function OgLogin() {
-  const [ogNumber, setOgNumber] = useState('');
+  const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
@@ -15,8 +15,8 @@ function OgLogin() {
     const authToken = localStorage.getItem('authToken');
 
   }, []);
-  const handleOgNumberChange = (e) => {
-    setOgNumber(e.target.value);
+  const handleemailChange = (e) => {
+    setemail(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -27,13 +27,13 @@ function OgLogin() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/organisation/oglogin', {
+      const response = await fetch('http://localhost:8000/organization/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ogNumber,
+          email,
           password,
         }),
       });
@@ -54,7 +54,7 @@ function OgLogin() {
     }
 
     // Reset the form after handling the login data
-    setOgNumber('');
+    setemail('');
     setPassword('');
   };
 
@@ -70,12 +70,12 @@ function OgLogin() {
             <h2>Login Form</h2>
             <form className="login-form" onSubmit={handleSubmit}>
               <div className="form-group-login">
-                <label htmlFor="ogNumber">Organisation Number:</label>
+                <label htmlFor="email">Organisation Number:</label>
                 <input
                   type="text"
-                  id="ogNumber"
-                  value={ogNumber}
-                  onChange={handleOgNumberChange}
+                  id="email"
+                  value={email}
+                  onChange={handleemailChange}
                 />
               </div>
               <div className="form-group-login">
