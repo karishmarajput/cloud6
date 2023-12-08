@@ -4,11 +4,14 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
 function NavbarCertif() {
+  const headStyle = {
+    zIndex: 10,
+  };
   return (
-    <Navbar expand="lg" data-bs-theme="light">
+    <Navbar expand="lg" data-bs-theme="light" style={headStyle}>
       <Container>
         <Navbar.Brand
-          style={{ color: "#0A4D68" }}
+          style={{ color: "#fff" }}
           href="#home"
           className="text-uppercase"
         >
@@ -19,19 +22,19 @@ function NavbarCertif() {
           <Nav className="ml-auto">
             <Nav.Link
               href="verify"
-              style={{ marginRight: "25px", color: "#0A4D68" }}
+              style={{ marginRight: "25px", color: "#fff" }}
             >
               Verify
             </Nav.Link>
             <Nav.Link
               href="admin"
-              style={{ marginRight: "25px", color: "#0A4D68" }}
+              style={{ marginRight: "25px", color: "#fff" }}
             >
               Admin Login
             </Nav.Link>
             <NavDropdown
               title="Join"
-              style={{ marginRight: "15px", color: "#0A4D68" }}
+              style={{ marginRight: "15px", color: "#fff" }}
               id="basic-nav-dropdown"
             >
               <NavDropdown.Item className="text-center" href="ogRegister">
