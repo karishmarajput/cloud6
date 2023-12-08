@@ -7,7 +7,7 @@ const Footer = () => {
     textDecoration: "none", // Remove underline
   };
   return (
-    <footer className="text-white py-4" style={{ backgroundColor: "#a1bccc" }}>
+    <footer className="text-white py-4" style={{ backgroundColor: "#4e54c8" }}>
       <Container>
         <Row>
           <Col md={6} className="text-center text-md-left">

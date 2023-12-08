@@ -33,8 +33,10 @@ function NavbarCertif() {
               Admin Login
             </Nav.Link>
             <NavDropdown
-              title="Join"
-              style={{ marginRight: "15px", color: "#fff" }}
+              title={<span style={{ color: "#fff" }}>Join</span>}
+              style={{
+                marginRight: "15px",
+              }}
               id="basic-nav-dropdown"
             >
               <NavDropdown.Item className="text-center" href="ogRegister">

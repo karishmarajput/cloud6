@@ -1,3 +1,17 @@
+body {
+  overflow-x: hidden;
+}
+
+.main-page::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.main-page {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 .main-page {
   height: 95vh;
   padding: 80px 0px;
@@ -9,6 +23,44 @@
   justify-content: center;
   align-items: center; /* Center both horizontally and vertically */
   text-align: left;
+}
+
+.art-bc {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  bottom: 570px;
+  left: 600px;
+  z-index: 0;
+}
+
+.art-spiral {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  right: 1150px;
+}
+
+.art-shield {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  top: 350px;
+  left: 1100px;
+}
+
+.header-text {
+  font-family: "Inter", sans-serif;
+  font-weight: 900;
+  font-size: 5rem;
+  z-index: 100;
+  margin-top: 20px;
+}
+
+.btn {
+  width: 200px;
+  z-index: 100;
+  font-size: 1.3rem;
 }
 
 .circles {
@@ -119,29 +171,21 @@
     border-radius: 50%;
   }
 }
-
-.heading {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* Center the image horizontally */
-.main-page img {
-  z-index: 100;
-  margin-top: 20px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 @media screen and (max-width: 768px) {
   .main-page {
     text-align: center;
-    height: auto;
+    height: 100vh;
     padding: 80px 20px;
   }
+
   .main-page img {
     margin-right: auto;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .header-text {
+    margin-top: 0;
+    font-size: 4rem;
   }
 }
