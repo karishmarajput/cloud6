@@ -60,7 +60,7 @@ function OgLogin() {
 
   return (
     <>
-      {/* <NavbarCertif /> */}
+      <NavbarCertif />
       <div className="login-container">
         <div className="flex-container-login">
           <div className="image-section-login">

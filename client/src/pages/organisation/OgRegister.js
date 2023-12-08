@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './OgRegister.css';
+import NavbarCertif from "../components/Navbar";
 
 function OgRegister() {
   // const [organizationNumber, setOrganizationNumber] = useState('');
@@ -63,6 +64,8 @@ function OgRegister() {
   };
 
   return (
+  <>
+    <NavbarCertif />
     <div style={{ display: 'flex' }}>
       <div className="image-section">
         <img src="login-side.png" alt="Organization" />
@@ -127,6 +130,7 @@ function OgRegister() {
         </form>
       </div>
     </div>
+    </>
   );
 }
 
