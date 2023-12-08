@@ -1,16 +1,3 @@
-/* html,
-body {
-  height: 100%;
-  margin: 0;
-} */
-
-/* .container {
-  display: flex;
-  position: relative;
-  height: 100%;
-  flex-direction: row;
-} */
-
 .image-section {
   flex: 1;
   padding: 20px;
@@ -39,7 +26,7 @@ body {
   flex: 1;
   padding: 20px;
   position: absolute;
-  top: 0;
+  top: 10%;
   left: -25%;
   width: 100%;
   box-sizing: border-box;

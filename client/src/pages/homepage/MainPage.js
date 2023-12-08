@@ -1,9 +1,22 @@
 import React from "react";
 import "./MainPage.css";
+import { motion } from "framer-motion";
 
 const MainPage = () => {
   return (
     <div className="main-page container">
+      <ul class="circles">
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+        </ul>
       <div className="row">
         <div className="heading col-md-6" style={{ color: "#F1F4F7" }}>
           <h3 className="display-7">Welcome to</h3>
