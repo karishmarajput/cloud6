@@ -1,5 +1,14 @@
 const mongoose = require('mongoose');
-
+const TemplateSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  publicBool: {
+    type: Boolean,
+    default: true,
+  },
+});
 const organisationSchema = new mongoose.Schema({
 
   name: {
@@ -24,13 +33,10 @@ const organisationSchema = new mongoose.Schema({
     default: false 
   },
   templates: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Template'
-    }
+    TemplateSchema
   ]
 });
 
 const Organisation = mongoose.model('Organisation', organisationSchema);
-
+// const Template = mongoose.model('Template', templateSchema);
 module.exports = Organisation;

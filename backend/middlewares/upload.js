@@ -13,6 +13,7 @@ const fileUpload = multer({
       fileSize : 10000000
   },
   fileFilter (req,file,cb){
+    console.log("hello")
       if(!file.originalname.match(/\.(docx)$/))
       {
           return cb(new Error('Please upload a word file'))

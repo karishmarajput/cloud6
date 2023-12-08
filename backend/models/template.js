@@ -1,16 +1,11 @@
 const mongoose = require('mongoose');
 
 const templateSchema = new mongoose.Schema({
-  templateId: {
-    type: String,
-    unique: true,
-    required: true,
-  },
-  path: {
+  name: {
     type: String,
     required: true,
   },
-  public: {
+  publicBool: {
     type: Boolean,
     default: true,
   },

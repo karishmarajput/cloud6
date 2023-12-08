@@ -88,7 +88,10 @@ exports.login = async(req,res,next) => {
 }
 
 exports.uploadTemplate = async(req,res,next) => {
+    console.log('hi')
     try {
+        console.log(req.body)
+        console.log(req.userData)
         const bool = req.body.publicBool;
         const org = await Organization.findById(req.userData.org.id);
         org.templates.push({name : req.file.filename,publicBool : bool})
@@ -337,7 +340,7 @@ function compareArraysIgnoringEmail(placeholderArray, attributeArray) {
 exports.uploadCSVandSelectTemplate = async(req,res,next) => {
     const template = req.body.template_id;
     //console.log(req.file.filename);
-    text = await extractTextFromDocx("C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/templates/" + template)
+    text = await extractTextFromDocx("backend/templates" + template)
     let placeholders = countPlaceholdersInText(text);
     let column_names = await getAttributesFromCSV("C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/csv_data/" + req.file.filename)
     if(compareArraysIgnoringEmail(placeholders,column_names) === false){
