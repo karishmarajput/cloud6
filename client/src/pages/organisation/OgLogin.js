@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OrganisationDashboard from './OrganisationDashboard';
 import './OgLogin.css';
 import NavbarCertif from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function OgLogin() {
   const [email, setemail] = useState('');
@@ -60,9 +60,18 @@ function OgLogin() {
 
   return (
     <>
-      <NavbarCertif />
+      <div className="navLogin">
+        <NavbarCertif  textColor="#FFFFFF" />
+      </div>
       <div className="login-container">
-        <div className="flex-container-login">
+        <div className= "bubbleBody">   
+          <div className="bubble bubble_one"></div>
+          <div className="bubble bubble_two"></div>
+          <div className="bubble bubble_three"></div>
+          <div className="bubble bubble_four"></div>
+        </div>
+        
+        <div className="flex-container-login centreCard">
           <div className="image-section-login">
             <img src="login-side.png" alt="yo" />
           </div>
@@ -94,6 +103,7 @@ function OgLogin() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }
