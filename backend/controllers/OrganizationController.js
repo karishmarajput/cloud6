@@ -11,6 +11,7 @@ const util = require("util")
 const { resolve } = require("path");
 const { fstat } = require("fs");
 const {Document} = require("docxyz")
+const User = require("../models/UserData")
 const crypto = require('crypto');
 const mammoth = require('mammoth');
 const PDFServicesSdk = require('@adobe/pdfservices-node-sdk');
@@ -241,7 +242,21 @@ function calculatePDFHash(filePath, algorithm = 'sha256') {
         });
     });
 }
-async function mergeAndSendEmail(file_path,data_instance) {
+async function SaveUserData(data_instance,template_name){
+    const UserAvailable = await User.findOne({email :  data_instance[1]["email"]});
+    if(UserAvailable){
+        UserAvailable.totaldata.push({data : serializeWithDelimiter(data_instance,"#") + "#"+template_name});
+        const res = await UserAvailable.save()
+        return res;
+    }
+    else{
+        const NewUser = new User({_id : new mongoose.Types.ObjectId(),email :  data_instance[1]["email"]});
+        NewUser.totaldata.push({data : serializeWithDelimiter(data_instance,"#") + "#" + template_name});
+        const res = await NewUser.save();
+        return res
+    }
+}
+async function mergeAndSendEmail(file_path,data_instance,template_name) {
     try {
         const credentials = PDFServicesSdk.Credentials
             .servicePrincipalCredentialsBuilder()
@@ -283,6 +298,8 @@ async function mergeAndSendEmail(file_path,data_instance) {
             const sendMail = util.promisify(transporter.sendMail).bind(transporter);
             const info = await sendMail(mailOptions);
             const hash = await calculatePDFHash('C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/file_buffer'+uniqueFileName)
+            const saved = await SaveUserData(data_instance,template_name);
+            console.log(saved)
             console.log(hash)
             console.log(data_instance)
             /*if(data_instance.length === 3){
@@ -345,8 +362,11 @@ exports.uploadCSVandSelectTemplate = async(req,res,next) => {
         return res.status(400).json({message : "Placeholders and csv attributes do not match"})
     }
     ans = await parseCSVtoJSON("C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/csv_data/" + req.file.filename,placeholders);
+    ans = await parseCSVtoJSON("C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/csv_data/" + req.file.filename,placeholders);
     console.log(ans)
-    await mergeAndSendEmail("C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/templates/" + template,ans[0])
+    for(var i = 0 ;i < ans.length;i++){
+        await mergeAndSendEmail("C://Users//Dell//Desktop//Poolygon Test//certificateVerifier//backend//templates//" + template,ans[i],template)
+    }
     return res.status(200).json({message : "done"})
     
 }
