@@ -10,5 +10,6 @@ router.get("/home",checkAuth,AdminController.getUnverifiedOrganizations);
 router.get("/organisation",checkAuth,AdminController.getVerifiedOrganizations);
 router.post("/deleteOrganization/:organizationId",checkAuth,AdminController.deleteOrganization);
 router.post("/verifyUser/:organizationId",checkAuth,AdminController.verifyOrganization);
+router.post("/getuserdetails",checkAuth,AdminController.GetDetails);
 
 module.exports = router;

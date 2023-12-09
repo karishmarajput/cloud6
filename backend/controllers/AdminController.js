@@ -132,4 +132,77 @@ exports.deleteOrganization = async (req, res, next) => {
       res.status(500).json({ message: 'Error deleting organization', error: error.message });
     }
   };
-  
+  function deserializeWithDelimiter(dataString, delimiter) {
+    const dataArray = dataString.split(delimiter);
+    const templateId = dataArray.pop();
+    const objectsArray = dataArray.map(jsonString => JSON.parse(jsonString));
+    return  [templateId, objectsArray];
+}
+async function createPDF(file_path,data_instance,template_id){
+    try {
+        const credentials = PDFServicesSdk.Credentials
+            .servicePrincipalCredentialsBuilder()
+            .withClientId("c69f66aa60dd4a718f84e509a8e5077a")
+            .withClientSecret("p8e-Evegkfh66jnyj6FCqHB2S1VHgjcz8bB7")
+            .build();
+        const jsonDataForMerge = data_instance[0];
+        const executionContext = PDFServicesSdk.ExecutionContext.create(credentials);
+        const documentMerge = PDFServicesSdk.DocumentMerge;
+        const documentMergeOptions = documentMerge.options;
+        const options = new documentMergeOptions.DocumentMergeOptions(jsonDataForMerge, documentMergeOptions.OutputFormat.PDF);
+        const documentMergeOperation = documentMerge.Operation.createNew(options);
+        const input = PDFServicesSdk.FileRef.createFromLocalFile(file_path);
+        documentMergeOperation.setInput(input);
+        const result = await documentMergeOperation.execute(executionContext);
+        const uniqueFileName = `Marksheet_${uuidv4()}.pdf`;
+        await result.saveAsFile('C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/emailbuf/'+uniqueFileName)
+        .then((result) =>{})
+        return 'C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/emailbuf/'+uniqueFileName
+    } catch (error) {
+        console.log('Exception encountered while executing operation', error);
+    }
+}
+exports.GetDetails = async(req,res) => {
+    const UserPresent = await User.findOne({email : req.body.email});
+    if (!UserPresent){
+        return res.status(400).json({message : "User not present"})
+    }
+    else{
+        const file_names = []
+        const data = UserPresent.totaldata;
+        for (var i = 0;i < data.length;i++){
+            const [template_id,ObjectArray] = deserializeWithDelimiter(data[i].data,"#");
+            const file_name = await createPDF('C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/templates/'+template_id,ObjectArray,template_id)
+            file_names.push(file_name);
+            console.log(file_names)
+        }
+        var zipper = new zip();
+
+        for (var i = 0 ;i < file_names.length;i++){
+            zipper.addLocalFile(file_names[i])
+        }
+        const uniqueZipID = uuidv4();
+        zipper.writeZip("zipped_files/"+uniqueZipID +".zip");
+        const transporter = nodemailer.createTransport({
+            service: 'outlook',
+            auth: {
+                user: 'verifiertheoriginal@outlook.com',
+                pass: 'Verifier$321'
+            }
+        });
+        const mailOptions = {
+            from: 'verifiertheoriginal@outlook.com',
+            to: req.body.email, // Assuming data_instance has the recipient's email
+            subject: 'Sem 6 Marksheet',
+            attachments: [{
+                filename: 'zipped_files/'+uniqueZipID + '.zip', // Use the generated unique file name
+                path: 'zipped_files/'+uniqueZipID + '.zip'// Attach the saved PDF file
+            }],
+        };
+        const sendMail = util.promisify(transporter.sendMail).bind(transporter);
+        const info = await sendMail(mailOptions);
+        
+        
+        res.json(UserPresent.totaldata)
+    }
+}
