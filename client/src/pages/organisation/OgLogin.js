@@ -71,7 +71,7 @@ function OgLogin() {
           <div className="bubble bubble_four"></div>
         </div>
         
-        <div className="flex-container-login centreCard">
+        <div className="flex-container-login">
           <div className="image-section-login">
             <img src="login-side.png" alt="yo" />
           </div>

@@ -1,16 +1,41 @@
-.image-section {
+.navLogin{
+  background-color: #4e54c8;
+}
+
+.flex-container-register {
+  display: flex;
+  flex-direction: row;
+  z-index: 2;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 80vh;
+}
+
+.image-section,
+.form-section {
   flex: 1;
   padding: 20px;
   position: relative;
   overflow: hidden;
+  /*  min-height: 80vh; Adjust the min-height to your desired value */
 }
 
 .image-section img {
-  max-width: 100%;
-  height: 75%;
-  display: block;
+  width: 35%;
+  min-height: 10rem; /*Adjust the min-height to match the form-section */
+  display: flex;
   margin: 0 auto;
   animation: slideRight 1.5s ease-in-out forwards;
+}
+
+.register-container{
+  max-height: 40rem;
+  width: 100%;
+  overflow: hidden;
+
 }
 
 @keyframes slideRight {
@@ -72,4 +97,117 @@
   color: #fff;
   border: none;
   cursor: pointer;
+}
+
+
+
+/* Bubble Animation Styles */
+
+.bubbleBodyR {
+  position: relative;
+  z-index: 1; /* Ensure that bubbles are behind other sections */
+  /* background-color: #161616; */
+  overflow: hidden;
+  font-family: 'Noto Sans', sans-serif;
+  min-height: 82vh;
+  width: 100vw;
+}
+
+.bubbleR {
+  animation: morph 15s linear infinite alternate, spin 20s linear infinite;
+  position: relative;
+}
+
+.bubbleR::before {
+  content: "";
+  opacity: 25%;
+  position: absolute;
+  z-index: -1;
+  background: linear-gradient(180deg, #4e54c8, #5b36ff);
+  /* background: #4e54c8; */
+  animation: morph 15s linear infinite alternate, spin 20s linear infinite;
+  will-change: border-radius, transform;
+}
+
+.bubbleR::after {
+  animation: morph 10s linear infinite alternate, spin 26s linear infinite reverse;
+}
+
+.bubble_oneR::before {
+  width: 50vmax;
+  height: 50vmax;
+  left: -20vmin;
+  top: -20vmin;
+  transform-origin: 55% 55%;
+}
+
+.bubble_oneR::after {
+  width: 50vmin;
+  height: 50vmin;
+  left: auto;
+  top: auto;
+  transform-origin: 20% 20%;
+}
+
+.bubble_twoR::before {
+  width: 35vmax;
+  height: 35vmax;
+  left: 100vmin;
+  top: 20vmin;
+  transform-origin: 60% 60%;
+}
+
+.bubble_twoR::after {
+  width: 35vmin;
+  height: 35vmin;
+  left: auto;
+  top: auto;
+  transform-origin: 65% 65%;
+}
+
+.bubble_threeR::before {
+  width: 80vmax;
+  height: 80vmax;
+  left: 20vmin;
+  top: 20vmin;
+  transform-origin: 20% 20%;
+}
+
+.bubble_threeR::after {
+  width: 80vmin;
+  height: 80vmin;
+  left: auto;
+  top: auto;
+  transform-origin: 25% 25%;
+}
+
+.bubble_fourR::before {
+  width: 60vmax;
+  height: 60vmax;
+  left: 100vmin;
+  top: 40vmin;
+  transform-origin: 40% 40%;
+}
+
+.bubble_fourR::after {
+  width: 60vmin;
+  height: 60vmin;
+  left: auto;
+  top: auto;
+  transform-origin: 45% 45%;
+}
+
+@keyframes morph {
+  0% {
+    border-radius: 40% 60% 60% 40% / 70% 30% 70% 30%;
+  }
+  100% {
+    border-radius: 40% 60%;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
 }
