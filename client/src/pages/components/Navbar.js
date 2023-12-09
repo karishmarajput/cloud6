@@ -3,15 +3,16 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
-function NavbarCertif() {
+function NavbarCertif(props) {
   const headStyle = {
     zIndex: 10,
   };
+  var textColor = props.color;
   return (
     <Navbar expand="lg" data-bs-theme="light" style={headStyle}>
       <Container>
         <Navbar.Brand
-          style={{ color: "#fff" }}
+          style={{ color: { textColor } }}
           href="#home"
           className="text-uppercase"
         >
@@ -22,18 +23,18 @@ function NavbarCertif() {
           <Nav className="ml-auto">
             <Nav.Link
               href="verify"
-              style={{ marginRight: "25px", color: "#fff" }}
+              style={{ marginRight: "25px", color: { textColor } }}
             >
               Verify
             </Nav.Link>
             <Nav.Link
               href="admin"
-              style={{ marginRight: "25px", color: "#fff" }}
+              style={{ marginRight: "25px", color: { textColor } }}
             >
               Admin Login
             </Nav.Link>
             <NavDropdown
-              title={<span style={{ color: "#fff" }}>Join</span>}
+              title={<span style={{ color: { textColor } }}>Join</span>}
               style={{
                 marginRight: "15px",
               }}
