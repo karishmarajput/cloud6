@@ -8,11 +8,15 @@ function OrganisationDashboard(){
         
       navigate('/generate-certificate');
       };
+    const handleuploadTemplate=()=>{
+      navigate('/upload-template');
+    }
     return(
         <div>
 
             Dashboard
             <button onClick={handleGenerateCertificate}>Generate Certificate</button>
+            <button onClick={handleuploadTemplate}>Upload Template</button>
         </div>
     )
 }

@@ -11,6 +11,7 @@ import ListAllAuth from "./pages/authRoute/ListAllAuth";
 import OrganisationAuth from "./pages/authRoute/organisationAuth";
 import GenerateCertificateAuth from "./pages/authRoute/GenerateCertificate";
 import Verify from "./pages/Verify";
+import UploadTemplate from "./pages/organisation/UploadTemplate";
 function App() {
   return (
     <div className="App">
@@ -26,6 +27,10 @@ function App() {
           <Route
             path="generate-certificate"
             element={<GenerateCertificateAuth />}
+          />
+          <Route
+            path="upload-template"
+            element={<UploadTemplate />}
           />
           <Route path="verify" element={<Verify/>}/>
         </Routes>
