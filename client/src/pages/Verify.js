@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 function Verify() {
   return (
     <div>
-      <NavbarCertif color="#000" />
+      <NavbarCertif textColor="#000" />
       <DragDropFile />
       <Footer />
     </div>
