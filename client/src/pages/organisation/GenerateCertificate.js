@@ -95,7 +95,7 @@ function GenerateCertificate() {
     }
   };
   const handleUpload = async () => {
-    if (!file || !selectedTemplate) {
+    if (!file) {
       return;
     }
 
@@ -116,6 +116,7 @@ function GenerateCertificate() {
 
       if (response.ok) {
         closeModal();
+        fetchTemplates();
       } else {
         console.error('Failed to upload file');
       }
