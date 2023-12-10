@@ -1,7 +1,7 @@
 .feature-page {
   padding: 80px 20px;
-  background-color: #fce8df;
-  color: #e6a36a;
+  background-color: #fff;
+  color: #4e54c8;
 }
 
 .feature-list {
@@ -14,8 +14,8 @@
   text-align: center;
   padding: 20px;
   border-radius: 8px;
-  background-color: #e6a36a;
-  color: #fce8df;
+  background-color: #4e54c8;
+  color: #fff;
 }
 
 .feature-card h4 {

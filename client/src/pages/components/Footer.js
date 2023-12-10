@@ -19,8 +19,8 @@ const Footer = () => {
                 Home
               </a>
               <span className="text-muted">|</span>
-              <a href="/features" className="text-white mx-2" style={linkStyle}>
-                Features
+              <a href="/verify" className="text-white mx-2" style={linkStyle}>
+                Verify
               </a>
               <span className="text-muted">|</span>
               <a
