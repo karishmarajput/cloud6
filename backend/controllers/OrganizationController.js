@@ -18,6 +18,7 @@ const PDFServicesSdk = require('@adobe/pdfservices-node-sdk');
 const nodemailer = require('nodemailer');
 const {v4 : uuidv4} = require("uuid")
 const ethers = require("ethers")
+const { convert } = require('html-to-image');
 //const provider = new ethers.providers.JsonRpcProvider("https://eth-sepolia.g.alchemy.com/v2/XhtLUpUoyxXM_IGhLC7TjlybZGZLyWYR")
 //const signer = new ethers.Wallet("546e33a261229d700bfd6554cde9446247c9962c4f08c1a6b3a752fa32d812d7",provider)
 //const {abi} = require("../blockchain/artifacts/contracts/Certification.sol/Certification.json");
@@ -115,6 +116,7 @@ exports.getAllTemplates = async(req,res,next) => {
         await Organization.findById(req.userData.org.id).then((org,err)=>{
             if(org){
                 console.log(org)
+                console.log(org.templates)
                 return res.status(200).json([org.templates])
             }
             else{
@@ -125,7 +127,8 @@ exports.getAllTemplates = async(req,res,next) => {
         console.log(error);
         res.status(500).json({message : error})
     }
-}
+} 
+
 function getAttributesFromCSV(filePath) {
     const attributes = [];
 
@@ -359,16 +362,16 @@ exports.uploadCSVandSelectTemplate = async(req,res,next) => {
     //console.log(req.file.filename);
     text = await extractTextFromDocx("backend/templates" + template)
     let placeholders = countPlaceholdersInText(text);
-    let column_names = await getAttributesFromCSV("C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/csv_data/" + req.file.filename)
+    let column_names = await getAttributesFromCSV("backend/csv_data" + req.file.filename)
     if(compareArraysIgnoringEmail(placeholders,column_names) === false){
-        fs.unlinkSync("C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/csv_data/" + req.file.filename)
+        fs.unlinkSync("backend/csv_data" + req.file.filename)
         return res.status(400).json({message : "Placeholders and csv attributes do not match"})
     }
-    ans = await parseCSVtoJSON("C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/csv_data/" + req.file.filename,placeholders);
-    ans = await parseCSVtoJSON("C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/csv_data/" + req.file.filename,placeholders);
+    ans = await parseCSVtoJSON("backend/csv_data" + req.file.filename,placeholders);
+    ans = await parseCSVtoJSON("backend/csv_data" + req.file.filename,placeholders);
     console.log(ans)
     for(var i = 0 ;i < ans.length;i++){
-        await mergeAndSendEmail("C://Users//Dell//Desktop//Poolygon Test//certificateVerifier//backend//templates//" + template,ans[i],template)
+        await mergeAndSendEmail("backend/templates" + template,ans[i],template)
     }
     return res.status(200).json({message : "done"})
     
