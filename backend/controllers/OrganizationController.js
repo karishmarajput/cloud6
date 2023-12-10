@@ -12,6 +12,7 @@ const PDFServicesSdk = require('@adobe/pdfservices-node-sdk');
 const nodemailer = require('nodemailer');
 const {v4 : uuidv4} = require("uuid")
 const ethers = require("ethers")
+var convertapi = require("convertapi")('ozeDVGketrfbznX6');
 require("dotenv").config()
 const { convert } = require('html-to-image');
 
@@ -19,6 +20,22 @@ const Organization = require("../models/OrganizationModel");
 const uploadFile = require("../middlewares/upload")
 const User = require("../models/UserData")
 
+
+const provider = new ethers.providers.JsonRpcProvider(process.env.API_URL)
+const signer = new ethers.Wallet(process.env.PRIVATE_KEY,provider)
+const {abi} = require("../blockchain/artifacts/contracts/Certification.sol/Certification.json");
+const contractAddress = process.env.CONTRACT_ADDRESS
+const contractInstance = new ethers.Contract(contractAddress,abi,signer);
+
+
+function getUnixTimestampForNextMonths(numMonths) {
+    const currentDate = new Date();
+    const nextDate = new Date(currentDate);
+    nextDate.setMonth(currentDate.getMonth() + numMonths);
+    const currentUnixTimestamp = Math.floor(currentDate.getTime() / 1000);
+    const nextUnixTimestamp = Math.floor(nextDate.getTime() / 1000);
+    return { currentUnixTimestamp, nextUnixTimestamp };
+  }
 //Organization Signup
 exports.signup = async(req,res,next) => {
     const {name,email,phoneNumber,password} = req.body;
@@ -129,9 +146,16 @@ exports.uploadTemplate = async(req,res,next) => {
         org.templates.push({name : req.file.filename,publicBool : bool})
         await org.save().then((result,err)=>{
             if(err){
+                
+                
                 return res.status(400).json({message : "Could not upload"})
             }
             else{
+                convertapi.convert('jpg',{
+                    File : "./templates/"+req.file.filename
+                },'doc').then(function(result){
+                    result.saveFiles("./image_files")
+                })
                 return res.status(200).json({message : "File Uploaded Successfully.",data : result})
             }
         })
@@ -295,7 +319,7 @@ async function mergeAndSendEmail(file_path,data_instance,template_name) {
         documentMergeOperation.setInput(input);
         const result = await documentMergeOperation.execute(executionContext);
         const uniqueFileName = `Certificate_${uuidv4()}.pdf`;
-        await result.saveAsFile('../backend/file_buffer/'+uniqueFileName)
+        await result.saveAsFile('../file_buffer/'+uniqueFileName)
         .then(async(result) => {
             const transporter = nodemailer.createTransport({
                 service: 'outlook',
@@ -309,24 +333,23 @@ async function mergeAndSendEmail(file_path,data_instance,template_name) {
                 to: data_instance[1]["email"],
                 subject: 'Certificate',
                 attachments: [{
-                    filename: '../backend/file_buffer/'+uniqueFileName,
-                    path: '../backend/file_buffer/'+uniqueFileName
+                    filename: '../file_buffer/'+uniqueFileName,
+                    path: '../file_buffer/'+uniqueFileName
                 }],
             };
             const sendMail = util.promisify(transporter.sendMail).bind(transporter);
             const info = await sendMail(mailOptions);
-            const hash = await calculatePDFHash('../backend/file_buffer/'+uniqueFileName)
+            const hash = await calculatePDFHash('../file_buffer/'+uniqueFileName)
             const saved = await SaveUserData(data_instance,template_name);
-            console.log(data_instance)
-            /*if(data_instance.length === 3){
-                const res = await addDataToBlockChainWithExpiry(data_instance[0]["id"],hash,data_instance[2]["expiry"])
+            if(data_instance.length === 3){
+                const res = await addDataToBlockChainWithExpiry(data_instance[0]["id"],hash,getUnixTimestampForNextMonths(data_instance[2]["expiry"]).nextUnixTimestamp)
                 console.log(res)
             }
             else{
                 const res = await addDataToBlockChainWithoutExpiry(data_instance[0]["id"],hash);
                 console.log(res)
             }
-            */
+            
             fs.unlinkSync('../backend/file_buffer/'+uniqueFileName);
         })
     } catch (err) {
