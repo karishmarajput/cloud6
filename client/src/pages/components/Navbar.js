@@ -12,7 +12,7 @@ function NavbarCertif({ textColor }) {
       <Container>
         <Navbar.Brand
           style={{ color: textColor }}
-          href="#home"
+          href="/"
           className="text-uppercase"
         >
           Verifier
