@@ -1,32 +1,33 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const Organization = require("../models/OrganizationModel");
-const uploadFile = require("../middlewares/upload")
-const fs = require("fs")
+const fs = require("fs");
 const csv = require("csv-parser");
-const multer = require("multer")
-const {format} = require("util");
 const util = require("util")
 const { resolve } = require("path");
-const { fstat } = require("fs");
 const {Document} = require("docxyz")
-const User = require("../models/UserData")
 const crypto = require('crypto');
 const mammoth = require('mammoth');
 const PDFServicesSdk = require('@adobe/pdfservices-node-sdk');
 const nodemailer = require('nodemailer');
 const {v4 : uuidv4} = require("uuid")
 const ethers = require("ethers")
+require("dotenv").config()
+
+const Organization = require("../models/OrganizationModel");
+const uploadFile = require("../middlewares/upload")
+const User = require("../models/UserData")
+
+
 //const provider = new ethers.providers.JsonRpcProvider("https://eth-sepolia.g.alchemy.com/v2/XhtLUpUoyxXM_IGhLC7TjlybZGZLyWYR")
 //const signer = new ethers.Wallet("546e33a261229d700bfd6554cde9446247c9962c4f08c1a6b3a752fa32d812d7",provider)
 //const {abi} = require("../blockchain/artifacts/contracts/Certification.sol/Certification.json");
 //const contractAddress = "0x600403fa270d33EedaD42395a7Cd337a26a4676B"
 //const contractInstance = new ethers.Contract(contractAddress,abi,signer);
-exports.signup = async(req,res,next) => { 
-    console.log('hello')
+
+//Organization Signup
+exports.signup = async(req,res,next) => {
     const {name,email,phoneNumber,password} = req.body;
-    console.log(req.body)
     try {
         let org = await Organization.findOne({email : email});
         if (org){
@@ -55,11 +56,11 @@ exports.signup = async(req,res,next) => {
         console.log(error.message);
         res.status(500).json({message : "Error while signing up the organization"})
     }
-      
 }
+
+//Organization Login
 exports.login = async(req,res,next) => {
     const {email,password} = req.body;
- 
     try {
         let org = await Organization.findOne({email : email});
         if (!org){
@@ -78,7 +79,7 @@ exports.login = async(req,res,next) => {
                 id : org._id
             }
         }
-        jwt.sign(payload,"hello",{expiresIn : 3600},(err,token)=>{
+        jwt.sign(payload,process.env.JWT_KEY,{expiresIn : 3600},(err,token)=>{
             if (err) throw err;
             res.status(200).json({_id : org._id,name : org.name,token : token})
         })
@@ -88,11 +89,47 @@ exports.login = async(req,res,next) => {
     }
 }
 
-exports.uploadTemplate = async(req,res,next) => {
-    console.log('hi')
+//Get Templates of a particular organization
+exports.getMyTemplates = async(req,res,next) => {
     try {
-        console.log(req.body)
-        console.log(req.userData)
+        const org = await Organization.findById(req.userData.org.id);
+        if(!org){
+            return res.status(400).json({message : "The organization doesn't exist"});
+        }
+        const templates = org.templates;
+        const templates_mapped = templates.map(obj => {
+            const { _id, name } = obj;
+            return { _id, name };
+        });
+        return res.status(200).json({data : templates_mapped})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message : "Server Error"})
+    }
+}
+
+//See the public templates and his templates
+/*exports.SeeAllTemplates = async(req,res,next) => {
+    try {
+        const org = await Organization.findById(req.userData.org.id);
+        if(!org){
+            return res.status(400).json({message : "The organization doesn't exist"});
+        }
+        const templates = org.templates;
+        const templates_mapped = templates.map(obj => {
+            const { _id, name } = obj;
+            return { _id, name };
+        });
+        const templates_public = await 
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message : "Server Error"})
+    }
+}*/
+
+//Upload a template (Word)
+exports.uploadTemplate = async(req,res,next) => {
+    try {
         const bool = req.body.publicBool;
         const org = await Organization.findById(req.userData.org.id);
         org.templates.push({name : req.file.filename,publicBool : bool})
@@ -101,7 +138,7 @@ exports.uploadTemplate = async(req,res,next) => {
                 return res.status(400).json({message : "Could not upload"})
             }
             else{
-                return res.status(200).json(result)
+                return res.status(200).json({message : "File Uploaded Successfully.",data : result})
             }
         })
       } catch (err) {
@@ -110,25 +147,10 @@ exports.uploadTemplate = async(req,res,next) => {
         });
       }
 };
-exports.getAllTemplates = async(req,res,next) => {
-    try {
-        await Organization.findById(req.userData.org.id).then((org,err)=>{
-            if(org){
-                console.log(org)
-                return res.status(200).json([org.templates])
-            }
-            else{
-                return res.status(400).json({message : "Could not fetch the templates"})
-            }
-        })
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({message : error})
-    }
-}
+
+//Get all the headers of the csv
 function getAttributesFromCSV(filePath) {
     const attributes = [];
-
     return new Promise((resolve, reject) => {
         fs.createReadStream(filePath)
             .pipe(csv())
@@ -151,8 +173,8 @@ async function addDataToBlockChainWithoutExpiry(CertificateID,HashedValue){
     const res = await contractInstance.GenerateCertificateWithInfinity(CertificateID,HashedValue);
     return res
 }
+//Get array of JSON objects according to the row data
 function parseCSVtoJSON(csvFilePath,placeholders){
-    //console.log(placeholders)
     return new Promise((resolve,reject)=>{
         const jsonArray = [];
         fs.createReadStream(csvFilePath)
@@ -176,9 +198,6 @@ function parseCSVtoJSON(csvFilePath,placeholders){
             else{
                 jsonArray.push([temp,emailObject]);
             }
-
-
-            
         })
         .on('end',() => {
             resolve(jsonArray)
@@ -188,19 +207,8 @@ function parseCSVtoJSON(csvFilePath,placeholders){
         })
     })
 }
-function extractText(file_path){
-    mammoth.extractRawText({path: file_path})
-    .then(function(result){
-        var text = result.value; // The raw text
-        var messages = result.messages;
-        console.log(messages)
-        console.log(text)
-        return text
-    })
-    .catch(function(error) {
-        console.error(error);
-    });
-}
+
+//Extracting text from docx file
 async function extractTextFromDocx(filePath) {
     try {
         const result = await mammoth.extractRawText({path : filePath});
@@ -209,23 +217,15 @@ async function extractTextFromDocx(filePath) {
         throw error;
     }
 }
+
+//Using regex to count the number of placeholders in the file
 function countPlaceholdersInText(text) {
     const pattern = /{{.*?}}/g;
     const matches = text.match(pattern) || [];
     return matches.map(match => match.replace(/{{|}}/g, '').trim());
-    //return matches.length;
 }
-function arePlaceholdersEqual(array1,array2){
-    if (array1.length !== array2.length) {
-        return false;
-    }
-    for (let i = 0; i < array1.length; i++) {
-        if (array1[i].trim() !== array2[i].trim()) {
-            return false;
-        }
-    }
-    return true;
-}
+
+//Calculate the PDF Hash
 function calculatePDFHash(filePath, algorithm = 'sha256') {
     const hash = crypto.createHash(algorithm);
     const fileStream = fs.createReadStream(filePath);
@@ -245,6 +245,13 @@ function calculatePDFHash(filePath, algorithm = 'sha256') {
         });
     });
 }
+
+//Serializing Data
+function serializeWithDelimiter(array, delimiter) {
+    return array.map(item => JSON.stringify(item)).join(delimiter);
+}
+
+//Utility for saving the serialized data corresponding to the user
 async function SaveUserData(data_instance,template_name){
     const UserAvailable = await User.findOne({email :  data_instance[1]["email"]});
     if(UserAvailable){
@@ -266,21 +273,17 @@ async function mergeAndSendEmail(file_path,data_instance,template_name) {
             .withClientId("c69f66aa60dd4a718f84e509a8e5077a")
             .withClientSecret("p8e-Evegkfh66jnyj6FCqHB2S1VHgjcz8bB7")
             .build();
-
-        const jsonDataForMerge = data_instance[0]; // Make sure data_instance is properly defined
+        const jsonDataForMerge = data_instance[0];
         const executionContext = PDFServicesSdk.ExecutionContext.create(credentials);
-
         const documentMerge = PDFServicesSdk.DocumentMerge;
         const documentMergeOptions = documentMerge.options;
         const options = new documentMergeOptions.DocumentMergeOptions(jsonDataForMerge, documentMergeOptions.OutputFormat.PDF);
         const documentMergeOperation = documentMerge.Operation.createNew(options);
-
         const input = PDFServicesSdk.FileRef.createFromLocalFile(file_path);
         documentMergeOperation.setInput(input);
-
         const result = await documentMergeOperation.execute(executionContext);
-        const uniqueFileName = `Marksheet_${uuidv4()}.pdf`;
-        await result.saveAsFile('C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/file_buffer'+uniqueFileName)
+        const uniqueFileName = `Certificate_${uuidv4()}.pdf`;
+        await result.saveAsFile('../backend/file_buffer/'+uniqueFileName)
         .then(async(result) => {
             const transporter = nodemailer.createTransport({
                 service: 'outlook',
@@ -291,19 +294,17 @@ async function mergeAndSendEmail(file_path,data_instance,template_name) {
             });
             const mailOptions = {
                 from: 'verifiertheoriginal@outlook.com',
-                to: data_instance[1]["email"], // Assuming data_instance has the recipient's email
-                subject: 'Sem 6 Marksheet',
+                to: data_instance[1]["email"],
+                subject: 'Certificate',
                 attachments: [{
-                    filename: 'C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/file_buffer'+uniqueFileName, // Use the generated unique file name
-                    path: 'C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/file_buffer'+uniqueFileName // Attach the saved PDF file
+                    filename: '../backend/file_buffer/'+uniqueFileName,
+                    path: '../backend/file_buffer/'+uniqueFileName
                 }],
             };
             const sendMail = util.promisify(transporter.sendMail).bind(transporter);
             const info = await sendMail(mailOptions);
-            const hash = await calculatePDFHash('C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/file_buffer'+uniqueFileName)
+            const hash = await calculatePDFHash('../backend/file_buffer/'+uniqueFileName)
             const saved = await SaveUserData(data_instance,template_name);
-            console.log(saved)
-            console.log(hash)
             console.log(data_instance)
             /*if(data_instance.length === 3){
                 const res = await addDataToBlockChainWithExpiry(data_instance[0]["id"],hash,data_instance[2]["expiry"])
@@ -314,7 +315,7 @@ async function mergeAndSendEmail(file_path,data_instance,template_name) {
                 console.log(res)
             }
             */
-            fs.unlinkSync('C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/file_buffer'+uniqueFileName);
+            fs.unlinkSync('../backend/file_buffer/'+uniqueFileName);
         })
     } catch (err) {
         console.log('Exception encountered while executing operation', err);
@@ -338,37 +339,30 @@ function getAttributesFromCSV(filePath) {
             });
     });
 }
+
+//Utility for comparing the placeholders and attributes
 function compareArraysIgnoringEmail(placeholderArray, attributeArray) {
-    // Remove "email" attribute from both arrays and trim other elements
     const cleanPlaceholder = placeholderArray.filter(attr => attr !== 'email').filter(attr => attr != 'expiry').map(attr => attr.trim());
     const cleanAttribute = attributeArray.filter(attr => attr !== 'email').filter(attr => attr != 'expiry').map(attr => attr.trim());
-
-    // Sort the arrays and compare
     const sortedPlaceholder = cleanPlaceholder.slice().sort();
     const sortedAttribute = cleanAttribute.slice().sort();
-
-    // Check if the arrays are equal
     const arraysAreEqual = JSON.stringify(sortedPlaceholder) === JSON.stringify(sortedAttribute);
-
     return arraysAreEqual;
 }
 
 
 exports.uploadCSVandSelectTemplate = async(req,res,next) => {
     const template = req.body.template_id;
-    //console.log(req.file.filename);
-    text = await extractTextFromDocx("backend/templates" + template)
+    text = await extractTextFromDocx("../backend/templates/" + template)
     let placeholders = countPlaceholdersInText(text);
-    let column_names = await getAttributesFromCSV("C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/csv_data/" + req.file.filename)
+    let column_names = await getAttributesFromCSV("../backend/csv_data/" + req.file.filename)
     if(compareArraysIgnoringEmail(placeholders,column_names) === false){
-        fs.unlinkSync("C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/csv_data/" + req.file.filename)
+        fs.unlinkSync("../backend/csv_data/" + req.file.filename)
         return res.status(400).json({message : "Placeholders and csv attributes do not match"})
     }
-    ans = await parseCSVtoJSON("C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/csv_data/" + req.file.filename,placeholders);
-    ans = await parseCSVtoJSON("C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/csv_data/" + req.file.filename,placeholders);
-    console.log(ans)
+    ans = await parseCSVtoJSON("../backend/csv_data/" + req.file.filename,placeholders);
     for(var i = 0 ;i < ans.length;i++){
-        await mergeAndSendEmail("C://Users//Dell//Desktop//Poolygon Test//certificateVerifier//backend//templates//" + template,ans[i],template)
+        await mergeAndSendEmail("../backend/templates/" + template,ans[i],template)
     }
     return res.status(200).json({message : "done"})
     

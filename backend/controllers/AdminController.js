@@ -1,9 +1,17 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const PDFServicesSdk = require('@adobe/pdfservices-node-sdk');
+const {v4 : uuidv4} = require("uuid")
+const zip = require("adm-zip")
+const nodemailer = require("nodemailer");
+const util = require("util")
+const jwt = require("jsonwebtoken")
+require("dotenv").config();
+
 const Admin = require("../models/AdminModel");
-const Organization = require("../models/OrganizationModel")
-const nodemailer = require('nodemailer');
+const Organization = require("../models/OrganizationModel");
+const User = require("../models/UserData");
+
 exports.signup = async(req,res,next) => { 
     const {email,password} = req.body;
     try {
@@ -24,18 +32,16 @@ exports.signup = async(req,res,next) => {
                 return res.status(200).json({message : "Admin Created"})
             }
             if (err){
-                return res.status(400).json({message : "Could not save admin"})
+                return res.status(400).json({message : "Admin could not be created"})
             }
         })
     } catch (error) {
-        console.log(error);
         res.status(500).json({message : "Error while signing up the admin"})
     }
       
 }
 exports.login = async(req,res,next) => {
     const {email,password} = req.body;
-    console.log(req.body)
     try {
         let admin = await Admin.findOne({email : email});
         if (!admin){
@@ -45,40 +51,71 @@ exports.login = async(req,res,next) => {
         if(!isMatch){
             return res.status(400).json({message : "Incorrect password"});
         }
-        const payload = {
-            admin : {
-                id : admin._id
-            }
-        }
-        jwt.sign(payload,"hello",{expiresIn : 3600},(err,token)=>{
+        const payload = {admin : {id : admin._id}}
+        jwt.sign(payload,process.env.JWT_KEY,{expiresIn : 3600},(err,token)=>{
             if (err) throw err;
-            res.status(200).json({token})
+            res.status(200).json({isAdmin: true,token : token})
         })
     } catch (error) {
-        console.log(error);
         res.status(500).json({messsage : "Server error"})
     }
 }
 exports.getUnverifiedOrganizations = async(req,res,next) =>{
     let data = await Organization.find({ isVerified: false });
-    console.log(data)
+    const data_mapped = data.map(obj => {
+        const { _id, name } = obj;
+        return { _id, name };
+      });
     if (data){
-        return res.status(200).json({data})
+        return res.status(200).json({data_mapped})
     }
     else{
         return res.status(400).json({message : "Could not fetch the data"})
     }
 }
+
 exports.getVerifiedOrganizations = async(req,res,next) =>{
     let data = await Organization.find({ isVerified: true });
-    console.log(data)
+    const data_mapped = data.map(obj => {
+        const { _id, name } = obj;
+        return { _id, name };
+      });
     if (data){
-        return res.status(200).json({data})
+        return res.status(200).json({data_mapped})
     }
     else{
         return res.status(400).json({message : "Could not fetch the data"})
     }
 }
+
+async function sendVerificationEmail(organization) {
+    const transporter = nodemailer.createTransport({
+      service: 'outlook',
+      auth: {
+        user: 'verifiertheoriginal@outlook.com',
+        pass: 'Verifier$321'
+      }
+    });
+  
+    const mailOptions = {
+      from: 'verifiertheoriginal@outlook.com',
+      to: organization.email,
+      subject: 'Organization Verification',
+      text: 'Your organization has been successfully verified by Admin.'
+    };
+    let attempt = 1;
+    while (attempt <= 5) {
+      try {
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Email sent:', info.response);
+        return;
+      } catch (error) {
+        console.error(`Error sending email (attempt ${attempt}):`, error);
+        attempt++;
+      }
+    }
+    console.error('Email could not be sent after 5 attempts.');
+  }
 
 exports.verifyOrganization = async(req,res,next) => {
     const organizationId = req.params.organizationId;
@@ -88,38 +125,23 @@ exports.verifyOrganization = async(req,res,next) => {
             return res.status(404).json({ message: 'Organization not found' });
         }
         organization.isVerified = true;
-        await organization.save();
-        const transporter = nodemailer.createTransport({ 
-            service: 'outlook',
-            auth: {
-                user: 'verifiertheoriginal@outlook.com',
-                pass: 'Verifier$321'
+        await organization.save()
+        .then((result,err) => {
+            if(result){
+                sendVerificationEmail(organization)
+                return res.status(200).json({ message: 'Verification status changed successfully' });
             }
-          });
-      
-          const mailOptions = {
-            from: 'verifiertheoriginal@outlook.com',
-            to: organization.email, 
-            subject: 'Organization Verification',
-            text: 'Your organization has been successfully verified by Admin.'
-          };
-      
-          transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-              console.error('Error sending email:', error);
-            } else {
-              console.log('Email sent:', info.response);
+            else{
+                return res.status(400).json({message : "Could not verify the organization"})
             }
-          });
-        res.status(200).json({ message: 'Verification status changed successfully' });
+        })
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(500).json({ message: 'Internal Server Error' });
     }
 }
 exports.deleteOrganization = async (req, res, next) => {
     const organizationId = req.params.organizationId;
-    console.log(organizationId)
     try {
       const organization = await Organization.findByIdAndDelete(organizationId);
       if (!organization) {
@@ -128,10 +150,10 @@ exports.deleteOrganization = async (req, res, next) => {
   
       res.status(200).json({ message: 'Organization deleted successfully' });
     } catch (error) {
-      console.error(error); // Log the error for debugging purposes
+      console.error(error);
       res.status(500).json({ message: 'Error deleting organization', error: error.message });
     }
-  };
+};
   function deserializeWithDelimiter(dataString, delimiter) {
     const dataArray = dataString.split(delimiter);
     const templateId = dataArray.pop();
@@ -155,9 +177,9 @@ async function createPDF(file_path,data_instance,template_id){
         documentMergeOperation.setInput(input);
         const result = await documentMergeOperation.execute(executionContext);
         const uniqueFileName = `Marksheet_${uuidv4()}.pdf`;
-        await result.saveAsFile('C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/emailbuf/'+uniqueFileName)
+        await result.saveAsFile('backend/emailbuf/'+uniqueFileName)
         .then((result) =>{})
-        return 'C:/Users/Dell/Desktop/Poolygon Test/certificateVerifier/backend/emailbuf/'+uniqueFileName
+        return 'backend/emailbuf/'+uniqueFileName
     } catch (error) {
         console.log('Exception encountered while executing operation', error);
     }
@@ -192,11 +214,11 @@ exports.GetDetails = async(req,res) => {
         });
         const mailOptions = {
             from: 'verifiertheoriginal@outlook.com',
-            to: req.body.email, // Assuming data_instance has the recipient's email
+            to: req.body.email,
             subject: 'Sem 6 Marksheet',
             attachments: [{
-                filename: 'zipped_files/'+uniqueZipID + '.zip', // Use the generated unique file name
-                path: 'zipped_files/'+uniqueZipID + '.zip'// Attach the saved PDF file
+                filename: 'zipped_files/'+uniqueZipID + '.zip',
+                path: 'zipped_files/'+uniqueZipID + '.zip'
             }],
         };
         const sendMail = util.promisify(transporter.sendMail).bind(transporter);
