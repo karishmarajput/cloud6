@@ -12,7 +12,9 @@ const FeaturePage = () => {
         <div className="col-md-4 mb-4">
           <div className="feature-card">
             <LockOpenRoundedIcon sx={{ fontSize: 150 }} />
-            <h4>Secure Verification</h4>
+            <h4>
+              <b>Secure Verification</b>
+            </h4>
             <p>
               Our platform ensures the security and authenticity of certificate
               verification.
@@ -22,7 +24,9 @@ const FeaturePage = () => {
         <div className="col-md-4 mb-4">
           <div className="feature-card">
             <PersonIcon sx={{ fontSize: 150 }} />
-            <h4>User-friendly Interface</h4>
+            <h4>
+              <b>User-friendly Interface</b>
+            </h4>
             <p>
               Enjoy a user-friendly interface for a seamless and intuitive
               verification process.
@@ -32,7 +36,9 @@ const FeaturePage = () => {
         <div className="col-md-4 mb-4">
           <div className="feature-card">
             <SpeedIcon sx={{ fontSize: 150 }} />
-            <h4>Fast and Reliable</h4>
+            <h4>
+              <b>Fast and Reliable</b>
+            </h4>
             <p>
               Experience fast and reliable verification services, ensuring quick
               results.

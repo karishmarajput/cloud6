@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import { TypeAnimation } from "react-type-animation";
 import "./OurStoryPage.css";
 
 const OurStoryPage = () => {
@@ -10,6 +11,23 @@ const OurStoryPage = () => {
           <Col md={6} className="mb-4 text-left">
             <h2 className="mb-3 display-4">Our Story</h2>
             <br />
+            <p>
+              <TypeAnimation
+                sequence={[
+                  "Wake.",
+                  1000,
+                  "Wake. Generate.",
+                  1000,
+                  "Wake. Generate. Verify.",
+                  1000,
+                  "Wake. Generate. Verify. Repeat.",
+                  1000,
+                ]}
+                speed={50}
+                repeat={Infinity}
+                style={{ fontSize: "2em" }}
+              />
+            </p>
             <p>
               Welcome to Verifier, where our journey began with a vision to
               simplify and secure the process of certificate verification and

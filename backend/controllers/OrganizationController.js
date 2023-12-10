@@ -13,17 +13,11 @@ const nodemailer = require('nodemailer');
 const {v4 : uuidv4} = require("uuid")
 const ethers = require("ethers")
 require("dotenv").config()
+const { convert } = require('html-to-image');
 
 const Organization = require("../models/OrganizationModel");
 const uploadFile = require("../middlewares/upload")
 const User = require("../models/UserData")
-
-
-//const provider = new ethers.providers.JsonRpcProvider("https://eth-sepolia.g.alchemy.com/v2/XhtLUpUoyxXM_IGhLC7TjlybZGZLyWYR")
-//const signer = new ethers.Wallet("546e33a261229d700bfd6554cde9446247c9962c4f08c1a6b3a752fa32d812d7",provider)
-//const {abi} = require("../blockchain/artifacts/contracts/Certification.sol/Certification.json");
-//const contractAddress = "0x600403fa270d33EedaD42395a7Cd337a26a4676B"
-//const contractInstance = new ethers.Contract(contractAddress,abi,signer);
 
 //Organization Signup
 exports.signup = async(req,res,next) => {
@@ -149,6 +143,24 @@ exports.uploadTemplate = async(req,res,next) => {
 };
 
 //Get all the headers of the csv
+exports.getAllTemplates = async(req,res,next) => {
+    try {
+        await Organization.findById(req.userData.org.id).then((org,err)=>{
+            if(org){
+                console.log(org)
+                console.log(org.templates)
+                return res.status(200).json([org.templates])
+            }
+            else{
+                return res.status(400).json({message : "Could not fetch the templates"})
+            }
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message : error})
+    }
+} 
+
 function getAttributesFromCSV(filePath) {
     const attributes = [];
     return new Promise((resolve, reject) => {

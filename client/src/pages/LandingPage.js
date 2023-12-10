@@ -8,7 +8,7 @@ import Footer from "./components/Footer";
 function LandingPage() {
   return (
     <div style={{ backgroundColor: "#4e54c8" }}>
-      <NavbarCertif />
+      <NavbarCertif textColor="#fff" />
       <MainPage />
       <FeaturePage />
       <WorkingPage />

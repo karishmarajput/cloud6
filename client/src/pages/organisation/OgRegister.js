@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './OgRegister.css';
 import NavbarCertif from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function OgRegister() {
   // const [organizationNumber, setOrganizationNumber] = useState('');
@@ -65,71 +66,82 @@ function OgRegister() {
 
   return (
   <>
-    <NavbarCertif />
-    <div style={{ display: 'flex' }}>
-      <div className="image-section">
-        <img src="login-side.png" alt="Organization" />
+    <div className="navLogin">
+        <NavbarCertif  textColor="#FFFFFF" />
       </div>
+    <div className="register-container">
+      <div className= "bubbleBodyR">   
+        <div className="bubbleR bubble_oneR"></div>
+        <div className="bubbleR bubble_twoR"></div>
+        <div className="bubbleR bubble_threeR"></div>
+        <div className="bubbleR bubble_fourR"></div>
+      </div>
+      <div className='flex-container-register'>
+        <div className="image-section">
+          <img src="login-side.png" alt="Organization" />
+        </div>
 
-      <div className="form-section">
-        <h2>Register Form</h2>
-        <form onSubmit={handleSubmit}>
-          {/* <div>
-            <label>
-              Organization Number:
-              <input
-                type="text"
-                value={organizationNumber}
-                onChange={handleOrgNumberChange}
-              />
-            </label>
-          </div> */}
-          <div>
-            <label>
-              Name:
-              <input
-                type="text"
-                value={name}
-                onChange={handleNameChange}
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Phone Number:
-              <input
-                type="text"
-                value={phoneNumber}
-                onChange={handlePhoneChange}
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Email:
-              <input
-                type="email"
-                value={email}
-                onChange={handleEmailChange}
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Password:
-              <input
-                type="password"
-                value={password}
-                onChange={handlePasswordChange}
-              />
-            </label>
-          </div>
-          <div>
-            <button type="submit">Register</button>
-          </div>
-        </form>
+        <div className="form-section">
+          <h2>Register Form</h2>
+          <form onSubmit={handleSubmit}>
+            {/* <div>
+              <label>
+                Organization Number:
+                <input
+                  type="text"
+                  value={organizationNumber}
+                  onChange={handleOrgNumberChange}
+                />
+              </label>
+            </div> */}
+            <div>
+              <label>
+                Name:
+                <input
+                  type="text"
+                  value={name}
+                  onChange={handleNameChange}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Phone Number:
+                <input
+                  type="text"
+                  value={phoneNumber}
+                  onChange={handlePhoneChange}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Email:
+                <input
+                  type="email"
+                  value={email}
+                  onChange={handleEmailChange}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Password:
+                <input
+                  type="password"
+                  value={password}
+                  onChange={handlePasswordChange}
+                />
+              </label>
+            </div>
+            <div>
+              <button type="submit">Register</button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+      </div>
+      <Footer />  
     </>
   );
 }
