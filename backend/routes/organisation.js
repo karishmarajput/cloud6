@@ -8,7 +8,8 @@ router.post("/signup",OrganizationController.signup)
 router.post("/login",OrganizationController.login);
 //checkAuth
 router.post("/uploadtemplate",checkAuth,upload.single("myFile"),OrganizationController.uploadTemplate)
-router.get("/gettemplates",checkAuth,OrganizationController.getAllTemplates)
+router.get("/gettemplates",checkAuth,OrganizationController.getMyTemplates)
 //checkAuth 
 router.post("/csvandtemplate",csvupload.single("csvfile"),OrganizationController.uploadCSVandSelectTemplate)
+
 module.exports = router;
