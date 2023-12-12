@@ -168,6 +168,7 @@ exports.uploadTemplate = async(req,res,next) => {
 
 //Get all the headers of the csv
 exports.getAllTemplates = async(req,res,next) => {
+    console.log('hello')
     try {
         await Organization.findById(req.userData.org.id).then((org,err)=>{
             if(org){

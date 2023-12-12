@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const path = require('path');
 const mongoose = require("mongoose");
 mongoose.connect(
   "mongodb://127.0.0.1:27017/newtemp?directConnection=true",
@@ -28,6 +29,17 @@ app.use((req, res, next) => {
 app.use("/admin",adminroute);
 app.use("/organization",organizationroute);
 app.use("/verify",verifyroute)
+app.get('/image_files/:filename', (req, res) => {
+  const filename = req.params.filename.replace('.docx','.jpg');
+  console.log(filename)
+  const imagePath = path.join(__dirname, 'image_files', filename);
+  res.sendFile(imagePath, (err) => {
+    if (err) {
+      console.error('Error sending file:', err);
+      res.status(404).json({ error: 'File not found' });
+    }
+  });
+});
 app.use((req, res, next) => {
     const error = new Error("Not found");
     error.status = 404;

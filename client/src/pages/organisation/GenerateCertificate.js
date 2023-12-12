@@ -26,7 +26,8 @@ function GenerateCertificate() {
 
       if (response.ok) {
         const data = await response.json();
-        setTemplates(data);
+        console.log(data.data)
+        setTemplates(data.data);
       } else {
         console.error('Failed to fetch templates');
       }
@@ -103,7 +104,7 @@ function GenerateCertificate() {
     const formData = new FormData();
     formData.append('myFile', file);
     formData.append('publicBool', isPublic);
-    formData.append('selectedTemplate', selectedTemplate.name); // Send the selected template name
+    
 
     try {
       const response = await fetch('http://localhost:8000/organization/uploadtemplate', {
@@ -144,17 +145,22 @@ function GenerateCertificate() {
           <button onClick={handleUpload}>Done</button>
         </div>
       </Modal>
-      {templates[0] &&
-        templates[0].map((template, index) => (
+      {console.log(templates)}
+      {templates &&
+        templates.map((template, index) => (
           <div
             key={index}
             style={{
               backgroundColor: selectedTemplate === template ? 'lightblue' : 'white',
             }}
             onClick={() => handleTemplateSelect(template)}
-          >
-            <h3>Template {index + 1}</h3>
-            <p>Template Name: {template.name}</p>
+          ><img
+          src={`http://localhost:8000/image_files/${template.name}`}
+          alt={template.name}
+          style={{ width: '300px', height: '200px' }}
+        />
+            {/* <h3>Template {index + 1}</h3>
+            <p>Template Name: {template.name}</p> */}
           </div>
         ))}
        <input type="file" onChange={handleCsvChange} />
