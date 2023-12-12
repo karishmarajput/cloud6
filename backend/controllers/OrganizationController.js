@@ -342,7 +342,9 @@ async function mergeAndSendEmail(file_path,data_instance,template_name) {
             const info = await sendMail(mailOptions);
             const hash = await calculatePDFHash('../file_buffer/'+uniqueFileName)
             const saved = await SaveUserData(data_instance,template_name);
+            console.log(data_instance.length)
             if(data_instance.length === 3){
+                console.log('hi')
                 const res = await addDataToBlockChainWithExpiry(data_instance[0]["id"],hash,getUnixTimestampForNextMonths(data_instance[2]["expiry"]).nextUnixTimestamp)
                 console.log(res)
             }
@@ -389,14 +391,21 @@ function compareArraysIgnoringEmail(placeholderArray, attributeArray) {
 
 exports.uploadCSVandSelectTemplate = async(req,res,next) => {
     const template = req.body.template_id;
+    console.log(template)
     text = await extractTextFromDocx("../backend/templates/" + template)
+    console.log(text)
     let placeholders = countPlaceholdersInText(text);
+    console.log(placeholders)
     let column_names = await getAttributesFromCSV("../backend/csv_data/" + req.file.filename)
+    console.log(column_names)
     if(compareArraysIgnoringEmail(placeholders,column_names) === false){
+        console.log('no')
         fs.unlinkSync("../backend/csv_data/" + req.file.filename)
         return res.status(400).json({message : "Placeholders and csv attributes do not match"})
     }
+    console.log('yes')
     ans = await parseCSVtoJSON("../backend/csv_data/" + req.file.filename,placeholders);
+    console.log(ans)
     for(var i = 0 ;i < ans.length;i++){
         await mergeAndSendEmail("../backend/templates/" + template,ans[i],template)
     }

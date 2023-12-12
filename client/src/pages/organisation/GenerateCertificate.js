@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
-
+import NavbarCertif from "../components/Navbar";
+import './generationCertificate.css'
+import Footer from "../components/Footer";
 function GenerateCertificate() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [file, setFile] = useState(null);
@@ -55,13 +57,26 @@ function GenerateCertificate() {
     }
   };
   
+const handleDragOver = (e) => {
+  e.preventDefault();
+};
+
+const handleDrop = (e) => {
+  e.preventDefault();
+  const droppedFile = e.dataTransfer.files[0]; 
+  if (droppedFile.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+
+    handleFileChange({ target: { files: [droppedFile] } });
+  } else {
+    console.log('Please drop a .docx file.');
+  }
+};
 
   const handleTemplateSelect = (template) => {
     setSelectedTemplate(template);
   };
   const handleCsvChange = (e) => {
     const selectedCsvFile = e.target.files[0];
-    // Handle CSV file selection logic here
     setSelectedCsv(selectedCsvFile);
   };
   const handleSubmit = async () => {
@@ -128,24 +143,47 @@ function GenerateCertificate() {
 
   return (
     <div>
-      <button onClick={openModal}>+</button>
+     <div className="navLogin">
+        <NavbarCertif  textColor="#FFFFFF" />
+      </div>
+      
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
-        <div>
-          <h2>Drag and Drop .docx File</h2>
-          <input type="file" onChange={handleFileChange} />
-          <div>
-            <label htmlFor="publicSwitch">Public</label>
-            <input
-              id="public"
-              type="checkbox"
-              checked={isPublic}
-              onChange={() => setIsPublic(!isPublic)}
-            />
-          </div>
-          <button onClick={handleUpload}>Done</button>
+      <button className="modal-close-btn" onClick={closeModal}>X</button>
+  <div onDragOver={handleDragOver} onDrop={handleDrop}>
+    <h2>Create New Template</h2>
+    <div className="drag-drop-area">
+    {file ? (
+    <p>Selected File: {file.name}</p>
+  ) : (
+    <div>
+    <p>Drag and drop your file here or</p>
+    <input type="file" className='dragdropBtn' onChange={handleFileChange} accept=".docx" />
+    </div>
+  )}
+
+    </div>
+    <div>
+      <label htmlFor="publicSwitch">Public</label>
+      <input
+        id="public"
+        type="checkbox"
+        checked={isPublic}
+        onChange={() => setIsPublic(!isPublic)}
+      />
+    </div>
+    <button onClick={handleUpload}>Done</button>
+  </div>
+</Modal>
+
+      <div className='container generationContent'>
+      <h1>Generate New Certificate</h1>
+      <h3>Templates</h3>
+      <div className='templates'>
+      <div >
+        <button  className="generationBtn" onClick={openModal}>
+          +
+        </button>
         </div>
-      </Modal>
-      {console.log(templates)}
       {templates &&
         templates.map((template, index) => (
           <div
@@ -159,13 +197,27 @@ function GenerateCertificate() {
           alt={template.name}
           style={{ width: '300px', height: '200px' }}
         />
-            {/* <h3>Template {index + 1}</h3>
-            <p>Template Name: {template.name}</p> */}
           </div>
         ))}
-       <input type="file" onChange={handleCsvChange} />
+        </div>
+       <input 
+       type="file" 
+       onChange={handleCsvChange} 
+       style={{
+        padding: '10px',
+        
+        marginBottom: '15px',
+        marginTop: '10px',
+        cursor: 'pointer',
+      }}
+      accept=".csv"
+      />
       <button onClick={handleSubmit}>Submit</button>
+      </div>
+      
+      <Footer />
     </div>
+    
   );
 }
 

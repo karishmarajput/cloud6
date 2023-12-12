@@ -67,7 +67,7 @@ exports.getUnverifiedOrganizations = async(req,res,next) =>{
         return { _id, name };
       });
     if (data){
-        return res.status(200).json({data_mapped})
+        return res.status(200).json({data})
     }
     else{
         return res.status(400).json({message : "Could not fetch the data"})
@@ -81,7 +81,7 @@ exports.getVerifiedOrganizations = async(req,res,next) =>{
         return { _id, name };
       });
     if (data){
-        return res.status(200).json({data_mapped})
+        return res.status(200).json({data})
     }
     else{
         return res.status(400).json({message : "Could not fetch the data"})
