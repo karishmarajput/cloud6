@@ -1,45 +1,44 @@
 const express = require("express");
 const app = express();
+require("dotenv").config();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-mongoose.connect(
-  "mongodb://127.0.0.1:27017/newtemp?directConnection=true",
-);
+mongoose.connect(process.env.MONGODB_URL);
 mongoose.Promise = global.Promise;
-const adminroute = require("./routes/admin")
-const organizationroute = require("./routes/organisation")
-const verifyroute = require("./routes/verification")
+const adminroute = require("./routes/admin");
+const organizationroute = require("./routes/organisation");
+const verifyroute = require("./routes/verification");
 app.use(morgan("dev"));
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-    );
-    if (req.method === "OPTIONS") {
-      res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
-      return res.status(200).json({});
-    }
-    next();
-  });
-app.use("/admin",adminroute);
-app.use("/organization",organizationroute);
-app.use("/verify",verifyroute)
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+    return res.status(200).json({});
+  }
+  next();
+});
+app.use("/admin", adminroute);
+app.use("/organization", organizationroute);
+app.use("/verify", verifyroute);
 app.use((req, res, next) => {
-    const error = new Error("Not found");
-    error.status = 404;
-    next(error);
-    });
+  const error = new Error("Not found");
+  error.status = 404;
+  next(error);
+});
 
-    app.use((error, req, res, next) => {
-    res.status(error.status || 500);
-    res.json({
-        error: {
-        message: error.message
-        }
-    });
+app.use((error, req, res, next) => {
+  res.status(error.status || 500);
+  res.json({
+    error: {
+      message: error.message,
+    },
+  });
 });
 module.exports = app;
