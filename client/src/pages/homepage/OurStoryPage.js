@@ -48,10 +48,14 @@ const OurStoryPage = () => {
           </Col>
           <Col md={6} className="mb-4 text-center">
             {/* Replace the placeholder image URL with your actual image URL */}
-            <img
-              src="https://via.placeholder.com/400x200"
+            <video
+              src="story-bc.mp4"
+              type="video/mp4"
               alt="Certificate Verification Image"
               className="img-fluid rounded elongated-rectangle"
+              autoPlay
+              loop
+              muted
             />
           </Col>
         </Row>

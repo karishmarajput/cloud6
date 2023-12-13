@@ -26,7 +26,7 @@ function AdminDashboard() {
         }
     
         const data = await response.json();
-
+        console.log(data)
         setOrganisations(data.data);
       } catch (error) {
         console.error('Error fetching organisations:', error);
