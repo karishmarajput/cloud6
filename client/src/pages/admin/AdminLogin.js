@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AdminLogin.css';
+import NavbarCertif from "../components/Navbar";
 
 function AdminLogin() {
   const [email, setemail] = useState('');
@@ -43,6 +44,11 @@ function AdminLogin() {
   };
 
   return (
+    <>
+    
+    <div className="navLogin">
+        <NavbarCertif  textColor="#FFFFFF" />
+    </div>
     <div className="login-container">
         <div className="flex-container-login">
           <div className="image-section-login">
@@ -76,6 +82,7 @@ function AdminLogin() {
           </div>
         </div>
       </div>
+      </>
   );
 }
 
