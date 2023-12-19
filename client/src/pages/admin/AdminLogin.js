@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './AdminLogin.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./AdminLogin.css";
 import NavbarCertif from "../components/Navbar";
 import Footer from "../components/Footer";
 
 function AdminLogin() {
-  const [email, setemail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setemail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleemailChange = (e) => {
@@ -21,38 +21,38 @@ function AdminLogin() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8000/admin/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8000/admin/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
-      console.log(response)
+      console.log(response);
       if (response.ok) {
         const data = await response.json();
         const authToken = data.token;
-        localStorage.setItem('authToken', authToken);
-        navigate('/admin-dashboard');
+        localStorage.setItem("authToken", authToken);
+        navigate("/admin-dashboard");
       } else {
-        alert('Invalid email or password');
+        alert("Invalid email or password");
       }
-      setemail('');
-      setPassword('');
+      setemail("");
+      setPassword("");
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
   return (
-    <> 
-    <div className="navLoginAdmin">
-        <NavbarCertif  textColor="#FFFFFF" />
-    </div>
-    <div className="login-container">
+    <div>
+      <div className="navLoginAdmin">
+        <NavbarCertif textColor="#FFFFFF" />
+      </div>
+      <div className="login-container">
         <div className="flex-container-login">
           <div className="image-section-login">
-            <img src="admin-login-side.jpg" alt="yo" />
+            <img src="admin-login-side.png" alt="yo" />
           </div>
           <div className="form-section-login">
             <h2>Admin Login</h2>
@@ -82,8 +82,8 @@ function AdminLogin() {
           </div>
         </div>
       </div>
-      {/* <Footer /> */}
-      </>
+      <Footer />
+    </div>
   );
 }
 
