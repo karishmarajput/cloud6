@@ -6,8 +6,8 @@
 }
 
 .elongated-rectangle {
-  width: 500px;
-  height: 500px;
+  width: 450px;
+  height: 400px;
   border-radius: 20px;
   margin: 0 auto;
 }
@@ -16,10 +16,5 @@
   .our-story-page {
     height: auto;
   }
-}
-
-.img-fluid:hover {
-  border: none; 
-  box-shadow: none;
 }
 

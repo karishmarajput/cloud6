@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AdminLogin.css';
 import NavbarCertif from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function AdminLogin() {
   const [email, setemail] = useState('');
@@ -44,9 +45,8 @@ function AdminLogin() {
   };
 
   return (
-    <>
-    
-    <div className="navLogin">
+    <> 
+    <div className="navLoginAdmin">
         <NavbarCertif  textColor="#FFFFFF" />
     </div>
     <div className="login-container">
@@ -82,6 +82,7 @@ function AdminLogin() {
           </div>
         </div>
       </div>
+      {/* <Footer /> */}
       </>
   );
 }

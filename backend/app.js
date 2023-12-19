@@ -14,22 +14,6 @@ app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use((req, res, next) => {
-<<<<<<< HEAD
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
-    return res.status(200).json({});
-  }
-  next();
-});
-app.use("/admin", adminroute);
-app.use("/organization", organizationroute);
-app.use("/verify", verifyroute);
-=======
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
       "Access-Control-Allow-Headers",
@@ -55,7 +39,6 @@ app.get('/image_files/:filename', (req, res) => {
     }
   });
 });
->>>>>>> 337d193019ca5100c308460fd14e50e384c655f5
 app.use((req, res, next) => {
   const error = new Error("Not found");
   error.status = 404;
